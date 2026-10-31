@@ -1,5 +1,5 @@
 {
-  "$comment": "AI Marketer Signal starter feeds. Links were checked in research, but parser compatibility requires a live trial. No X/API credentials in the repository. These feed items are candidates, not permission to republish full text. The first run adds missing sources; removing previously loaded demo sources from this JSON does NOT delete those already in PostgreSQL. Pause them in /admin.",
+  "$comment": "AI Marketer Signal starter feeds. Links were checked in research, but parser compatibility requires a live trial. No X/API credentials in the repository. These feed items are candidates, not permission to republish full text. The first run adds missing sources; removing previously loaded demo sources from this JSON does NOT delete those already in PostgreSQL. Pause them in /admin. All starter feeds are isolated by default: no automated public publication until editorial workflow is approved.",
   "sources": [
     {
       "id": "rss-n8n-blog",
@@ -13,7 +13,7 @@
       },
       "tier": "T1",
       "owner_entity_id": "n8n",
-      "participation_mode": "editorial",
+      "participation_mode": "isolated",
       "interval_minutes": 180,
       "tags": [
         "Automation",
@@ -34,7 +34,7 @@
       },
       "tier": "T1",
       "owner_entity_id": "buffer",
-      "participation_mode": "editorial",
+      "participation_mode": "isolated",
       "interval_minutes": 180,
       "tags": [
         "Social Media",
@@ -55,7 +55,7 @@
       },
       "tier": "T1",
       "owner_entity_id": "hubspot",
-      "participation_mode": "editorial",
+      "participation_mode": "isolated",
       "interval_minutes": 240,
       "tags": [
         "Growth",
@@ -76,7 +76,7 @@
       },
       "tier": "T1",
       "owner_entity_id": "make",
-      "participation_mode": "editorial",
+      "participation_mode": "isolated",
       "interval_minutes": 240,
       "tags": [
         "Automation"
