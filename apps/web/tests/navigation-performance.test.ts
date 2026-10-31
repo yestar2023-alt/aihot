@@ -83,7 +83,7 @@ test('SSR list and visited query variants return offline without another read',a
   const context=await safari.newContext({viewport:{width:390,height:844}});
   const page=await context.newPage();
   try{
-    await visit(page,origin+'/');
+    await visit(page,origin+'/archive');
     await expect(page.getByRole('link',{name:'性能检查文章',exact:true})).toBeVisible();
     await page.getByRole('link',{name:'性能检查文章',exact:true}).click();
     await expect(page.getByText('固定正文',{exact:true})).toBeVisible();
@@ -100,7 +100,7 @@ test('SSR list and visited query variants return offline without another read',a
     await context.setOffline(true);
     await page.goBack();
     await expect(page.getByRole('link',{name:'分类 workflow',exact:true})).toBeVisible({timeout:1500});
-    await expect(page.locator('link[rel=canonical]')).toHaveAttribute('href',origin+'/?category=workflow');
+    await expect(page.locator('link[rel=canonical]')).toHaveAttribute('href',origin+'/archive?category=workflow');
   }finally{await context.close();}
 });
 
@@ -108,7 +108,7 @@ test('hover downloads nothing, a press fetches article data once for its click, 
   const context=await chrome.newContext();const page=await context.newPage();
   const press={button:0,pointerType:'mouse',isPrimary:true};
   try{
-    await visit(page,origin+'/');
+    await visit(page,origin+'/archive');
     const link=page.getByRole('link',{name:'性能检查文章',exact:true});
     const start=hits.length;
     // In one task, as a scroll moves within the hold that makes a still touch a press; two calls can be further apart.
@@ -120,7 +120,7 @@ test('hover downloads nothing, a press fetches article data once for its click, 
     assert.equal(hits.slice(start).filter(x=>x.startsWith('/api/site/items/')).length,1,'the click reuses the prefetch its press started');
     const fresh=await chrome.newContext();const freshPage=await fresh.newPage();
     try{
-      await visit(freshPage,origin+'/');failing='/api/site/items/navigation-fixture';
+      await visit(freshPage,origin+'/archive');failing='/api/site/items/navigation-fixture';
       const failed=freshPage.waitForResponse(r=>r.url().includes('/items/navigation-fixture.data')&&r.status()===503);
       await freshPage.getByRole('link',{name:'性能检查文章',exact:true}).dispatchEvent('pointerdown',press);await failed;
       await expect(freshPage.getByRole('heading',{name:'精选',exact:true})).toBeVisible();
@@ -152,7 +152,7 @@ test('a press on a selected link preserves visited data and the next revisit sta
   await context.route('**/*.data*',route=>route.continue());
   page.on('request',request=>{if(request.url().includes('.data'))requests.push(request.url());});
   try{
-    await visit(page,origin+'/');
+    await visit(page,origin+'/archive');
     await page.getByRole('link',{name:'Workflows',exact:true}).click();
     await expect(page.getByRole('link',{name:'分类 workflow',exact:true})).toBeVisible();
     await page.getByRole('link',{name:'Workflows',exact:true}).dispatchEvent('pointerdown',{button:0,pointerType:'mouse',isPrimary:true});
@@ -172,7 +172,7 @@ test('a revisit never renews the original deadline; an expired read shows an err
   const context=await chrome.newContext();const page=await context.newPage();
   try{
     await page.clock.install();ttl=1;
-    await visit(page,origin+'/');
+    await visit(page,origin+'/archive');
     await page.getByRole('link',{name:'性能检查文章',exact:true}).click();await expect(page.getByText('固定正文',{exact:true})).toBeVisible();
     failing='/api/site/timeline';
     await page.clock.runFor(1500);
@@ -185,7 +185,7 @@ test('a revisit never renews the original deadline; an expired read shows an err
 test('SSR freshness spent in an upstream cache is not renewed by HTML hydration',async()=>{
   const context=await chrome.newContext();const page=await context.newPage();
   try{
-    ttl=0;await visit(page,origin+'/');
+    ttl=0;await visit(page,origin+'/archive');
     await page.getByRole('link',{name:'性能检查文章',exact:true}).click();await expect(page.getByText('固定正文',{exact:true})).toBeVisible();
     const start=hits.length;ttl=60;
     await page.goBack();await expect(page.getByRole('link',{name:'性能检查文章',exact:true})).toBeVisible();
@@ -223,7 +223,7 @@ test('Agent tabs finish offline with matching canonical; invalid direct tabs and
 test('phone suggestions load only on opening, use one small read, retry failures and update on reopening',async()=>{
   const context=await safari.newContext({viewport:{width:390,height:844}});const page=await context.newPage();
   try{
-    suggestionsVersion=1;await visit(page,origin+'/');
+    suggestionsVersion=1;await visit(page,origin+'/archive');
     assert.equal(hits.filter(x=>x==='/api/site/search/suggestions').length,0);
     let start=hits.length;
     await page.getByRole('button',{name:'搜索',exact:true}).click();
@@ -280,7 +280,7 @@ test('deep reading returns to its anchor, including folded dates',async()=>{
   const context=await safari.newContext({viewport:{width:390,height:844}});
   const page=await context.newPage();
   try{
-    await visit(page,origin+'/?tag=long-reading');
+    await visit(page,origin+'/archive?tag=long-reading');
     await expect(page.locator('[data-card-key]')).toHaveCount(180);
     await page.getByRole('button',{name:'收起10月4日',exact:true}).click();
     await expect(page.locator('[data-card-key]')).toHaveCount(120);
