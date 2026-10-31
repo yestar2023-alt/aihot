@@ -4,19 +4,8 @@
  * Usage: node --env-file-if-exists=.env scripts/bookmark-x.ts https://x.com/creator/status/1234567890123456789
  */
 import { pathToFileURL } from "node:url";
-
-export function parseXPostUrl(input: string): { url: string; handle: string; postId: string } {
-  let u: URL;
-  try { u = new URL(input.trim()); } catch { throw new Error("Expected an X/Twitter status URL."); }
-  if (u.protocol !== "https:" || !["x.com", "www.x.com", "twitter.com", "www.twitter.com"].includes(u.hostname.toLowerCase())) {
-    throw new Error("Only public https://x.com or https://twitter.com status URLs are accepted.");
-  }
-  const match = /^\/([A-Za-z0-9_]{1,15})\/status\/(\d{6,25})\/?$/.exec(u.pathname);
-  if (!match) throw new Error("Expected https://x.com/<handle>/status/<numeric-post-id>.");
-  const handle = match[1]!;
-  const postId = match[2]!;
-  return { url: `https://x.com/${handle}/status/${postId}`, handle, postId };
-}
+import { parseXPostUrl } from "../packages/backend/src/ingest/x-bookmark.ts";
+export { parseXPostUrl } from "../packages/backend/src/ingest/x-bookmark.ts";
 
 export async function saveXBookmark(input: string, options: {
   ingestToken: string; baseUrl?: string; fetchImpl?: typeof fetch;
