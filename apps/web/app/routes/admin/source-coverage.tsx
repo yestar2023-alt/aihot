@@ -53,7 +53,7 @@ function SourceCard({ entry }: { entry: SourceCoverageEntry }) {
     <div className="mt-4 flex flex-wrap gap-3">
       {entry.state !== "not_imported" ? <>
         <Link to={`/admin/sources/${encodeURIComponent(entry.id)}`} className="text-[13px] font-medium text-accent hover:underline">Details →</Link>
-        <button type="button" disabled={!!pending} onClick={async () => {
+        {entry.kind === "rss" && <button type="button" disabled={!!pending} onClick={async () => {
           setPreview(null);
           const result = await run<AdminSourcePreview>("POST",
             `/api/admin/sources/${encodeURIComponent(entry.id)}/preview`, undefined,
