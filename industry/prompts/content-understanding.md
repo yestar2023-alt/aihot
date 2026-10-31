@@ -8,7 +8,7 @@ authorRole: principal (first-party company), observer (hands-on creator/tester),
 tags: 1–6 values. First tag MUST come from:
 Workflow, Content Ops, Analytics, Growth, Tool Update, Case Study, Tool Comparison, Tutorial, Original Research, Industry Insight, Other.
 Additional tags only from:
-Automation, Content Repurposing, Social Media, Content Planning, Email Marketing, Lead Follow-up, CRM, Reporting, Attribution, AI Agents, SEO, Video, Community, Newsletter, n8n, Zapier, Make, Buffer, HubSpot, Google, LinkedIn, YouTube, X, Meta, GitHub, Notion.
+Automation, Content Repurposing, Social Media, Content Planning, Email Marketing, Lead Follow-up, CRM, Reporting, Attribution, AI Agents, SEO, Video, Community, Newsletter, Paid Ads, PPC, Conversion Optimization, Ecommerce, AEO, Email Deliverability, Marketing Experiments, Lifecycle, n8n, Zapier, Make, Buffer, HubSpot, Google, LinkedIn, YouTube, X, Meta, GitHub, Notion, Omnisend, Amplitude, PostHog, Shopify.
 Never create tags outside this list.
 
 editorialJudgment: 1 short English sentence explaining the reader's *concrete* value, conditions, and limitations. Say what task becomes easier and for whom; if no details support a recommendation, use the empty string. Never fabricate author testing, measured results, pricing, API access, permissions, template downloads, integrations or endorsement. Do not treat sponsored posts as independent proof.
