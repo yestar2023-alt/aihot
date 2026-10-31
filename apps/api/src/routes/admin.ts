@@ -18,6 +18,8 @@ import { replaceContactQr, setTargetEnabled, settingsOverview, updateBudget } fr
 import { createSource, fetchNow, listSources, previewSource, previewStoredSource, sourceDetail, updateSource } from "@aihot/backend/admin/sources";
 import { sendProblem } from "../http/respond.ts";
 import { adminHandler } from "./admin-auth.ts";
+import { ingestItems } from "@aihot/backend/ingest/items";
+import { parseXPostUrl } from "@aihot/backend/ingest/x-bookmark";
 
 // What every admin route reads its request with (the modules' admin routes too).
 type Q = Record<string, string | undefined>;
@@ -35,6 +37,20 @@ function decodeImage(dataUrl: unknown): Buffer {
 }
 
 export function registerAdmin(app: FastifyInstance) {
+  // Private manual X bookmark intake: an authenticated admin action, not a publishing endpoint.
+  app.post("/api/admin/bookmark-x", adminHandler(async (req, reply) => {
+    const raw = body<{ url?: unknown }>(req).url;
+    if (typeof raw !== "string" || raw.length > 2048) return reply.code(400).send({ detail: "Provide a valid X post URL (maximum 2048 characters)." });
+    let post: ReturnType<typeof parseXPostUrl>;
+    try { post = parseXPostUrl(raw); }
+    catch (e) { return reply.code(400).send({ detail: e instanceof Error ? e.message : "Invalid X URL." }); }
+    const stored = await ingestItems({
+      sourceId: "manual-x-bookmarks",
+      sourceName: "Manual X bookmarks",
+      items: [{ title: `X post by @${post.handle} (${post.postId}; content not retrieved)`, url: post.url }],
+    });
+    return { created: stored.created, url: post.url, private: true };
+  }));
   // Sources
   app.get("/api/admin/sources", adminHandler(async (req) => {
     const f = q(req);
