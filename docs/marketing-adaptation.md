@@ -20,6 +20,8 @@
 - Editorial prompts prioritize real workflows, evidence, limitations and the reader's task rather than model launches and funding news.
 - Manual X bookmarking: authenticated **`/admin/save-x`** browser form + `POST /api/admin/bookmark-x` (admin session + CSRF + private-source guard), alongside `scripts/bookmark-x.ts` for CLI. Both normalize X URLs, deduplicate through the existing external-ingest API and **do not retrieve tweet text** or fabricate timestamps.
 - `.env.example` defaults collection and model calls to disabled until an operator explicitly enables them.
+- Private editorial inbox: `/admin/curation`, `/api/admin/curation`, and `curation_reviews` migration. Editorial stages are `inbox → shortlisted → fact_checked → approved`, with rejection/reopening/revocation. Optimistic versions and audit log prevent silent overwrites. **Approved is only private editorial readiness; no public publication.**
+- New source form defaults to isolated; the original 4 marketing feeds and manual X source cannot be changed into auto-publication mode through the source administration API before a safe publication mechanism exists.
 - Original vector logo replaced; **PNG/ICO/Apple icons and nameplate assets still need replacement before public launch**.
 
 ## Exercise private X link bookmarking (local development)
@@ -41,20 +43,20 @@ Do not switch any candidate source to `editorial` or enable collection/model wor
 | Gap | Acceptance requirement |
 | --- | --- |
 | English frontend | Translate actual React Router interface copy and issue templates; only some config and prompts are English today. Do not set `locale=en-US` until the UI itself matches. |
-| Full source intake UI | `/admin/save-x` exists for X links. Extend it to GitHub and YouTube, add an inbox/review status and private ingestion audit; X text remains unverified until licensed retrieval. |
-| Private editorial pipeline | Database-backed states `inbox → triaged → shortlisted → fact_checked → approved/rejected`, audit logs and owner-only permissions. Current AIHOT auto-selection is **not** equivalent to approval. |
+| Full source intake UI | `/admin/save-x` and `/admin/curation` exist. Extend link saving to GitHub and YouTube and attach richer content metadata. X post text remains unverified until licensed retrieval. |
+| Public publication approval | Private review inbox, audited transitions and private-source guard are implemented. **Still missing:** mapping approval to a publication with explicit human release action and blocking every public outlet until release. |
 | Publication gate | Public signals, SEO pages, RSS and daily/weekly reports must see only explicitly approved items (including an audit record). End-to-end negative tests required. |
 | Content schema | Separate sourced curated link, editorial insight, published issue and human-verified playbook; distinguish source claim vs editor test. No bulk spun SEO pages. |
 | X radar | Official/licensed API access check, source accounts/keywords, spend limits, 429 handling, deletion handling and admin controls; **not connected**. |
 | GitHub / YouTube discovery | Source permissions, rate limits, clean incrementals, evidence and retrieval-status reporting. |
 | Newsletter | Double opt-in when appropriate, unsubscribe, provider webhooks and human-send approval; **no email has been configured or sent**. |
 | Asset/legal rollout | Replace all raster branded assets, write real Terms/Privacy and consent, add Affiliate disclosure, verify licensing and source opt-outs. |
-| Quality checks | `npm run typecheck`, `npm test`, web build, browser test and live feed preview on Node 24/Postgres 17. These have **not** been executed locally from this chat. |
+| Quality checks | GitHub CI runs typecheck, database tests, web build, browser tests and Docker. Check the PR's **latest commit** checks; an earlier run failed on legacy navigation fixture labels, which were updated. Feed previews still need a live trial. |
 | Production | Domain, hosting, credentials, backups, monitoring, billing approval and manual go-live review. Not authorized or performed. |
 
 ## Recommended next PR sequence
 
-1. **M1 — Private inbox & review gate:** expand existing `/admin/save-x` URL saver into reviewable inbox with DB state machine, do not publish AI-selected items automatically; add a migration plus tests and preserve public API semantics.
+1. **M1 — Explicit public release gate:** the private review inbox/state machine exists. Add a separate audited release action and enforce the release decision across all website, report, RSS, API, MCP and sitemap reads, with negative end-to-end tests.
 2. **M2 — English editorial UI:** migrate frontend copy and content rendering to English, implement curated signals and 1–2 human-authored playbooks with source traceability.
 3. **M3 — Content radar:** GitHub/RSS/YouTube metadata collection with observability, then licensed X radar only if credentials and budget are approved.
 4. **M4 — Newsletter & business:** verified email opt-in, Digest approval, provider send, templates and transparent Affiliate disclosure.
