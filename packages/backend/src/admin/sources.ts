@@ -123,6 +123,7 @@ const SelectionClass = z.string().refine((c) => Object.hasOwn(SELECTION.classes,
 // until the public approval gate is independently tested on all public reading surfaces.
 const PRIVATE_CURATED_SOURCE_IDS = new Set([
   "manual-x-bookmarks", "manual-github-bookmarks", "manual-youtube-bookmarks",
+  "rss-n8n-github-releases", "rss-n8n-youtube",
   "rss-n8n-blog", "rss-buffer-resources", "rss-hubspot-marketing", "rss-make-blog",
 ]);
 
