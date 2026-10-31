@@ -6,7 +6,7 @@ import type { ReportIndexResponse, ReportLatestPage, ReportNavigationResponse, S
 import { InvalidCursorError } from "@aihot/backend/lib/cursor";
 import { exportMarkdown, loadItemDetail } from "@aihot/backend/publication/detail";
 import { loadPool, SearchBusyError } from "@aihot/backend/publication/pool";
-import { publicCuration } from "@aihot/backend/admin/curation-release";
+import { publicCuration } from "@aihot/backend/publication/curation";
 import { loadTimeline } from "@aihot/backend/publication/timeline";
 import { loadStoryFollowups } from "@aihot/backend/publication/followups";
 import { loadGroupReports } from "@aihot/backend/publication/groups";
