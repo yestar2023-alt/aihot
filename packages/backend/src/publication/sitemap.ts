@@ -10,6 +10,7 @@ import { latestHotRanking } from "./hot.ts";
 import { ITEM_FROM } from "./items.ts";
 import { sql } from "../db.ts";
 import { shared } from "../lib/cache.ts";
+import { publicCuration } from "../admin/curation-release.ts";
 import { escapeXml } from "../lib/text.ts";
 import { siteUrl } from "./links.ts";
 import { evidenceCondition, listedCondition, selectedCondition, storyReportCondition } from "./scope.ts";
@@ -67,6 +68,16 @@ export async function loadDiscoveryEntries(at = new Date(), limits?: { stories: 
     { loc: "/privacy", revision: sha256(stableJson([POLICY.privacy, await readFile(path.join(REPO_ROOT, "site/pages/privacy.md"), "utf8")])), changefreq: "monthly", priority: 0.4 },
     { loc: "/changelog", revision: sha256(stableJson(loadChangelog())), changefreq: "weekly", priority: 0.5 },
   );
+  // A list page enters discovery only when at least one expressly released signal is public.
+  // Withdrawal removes the entry from fresh sitemap inventory as well as public reads.
+  const publishedSignals = await publicCuration(50);
+  if (publishedSignals.items.length > 0) {
+    entries.push({
+      loc: "/signals",
+      revision: sha256(stableJson(publishedSignals.items.map(i => [i.id, i.title, i.summary, i.releasedAt]))),
+      changefreq: "daily", priority: 0.8,
+    });
+  }
   for (const r of reports) entries.push({ loc: `/${r.kind}/${r.key}`, lastmod: r.t, revision: r.revision, changefreq: "monthly", priority: 0.6 });
   for (const t of topics) {
     if (!t.indexable) continue;
