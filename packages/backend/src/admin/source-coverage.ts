@@ -61,7 +61,7 @@ export async function sourceCoverage(): Promise<AdminSourceCoverage> {
     const lanes = [...MARKETING_SOURCE_LANES[id as keyof typeof MARKETING_SOURCE_LANES]] as MarketingLane[];
     if (!row) {
       return {
-        id, name: id, lanes, state: "not_imported", health: null, enabled: false, isolated: null,
+        id, name: id, kind: id.startsWith("x-") ? "x_search" : "rss", lanes, state: "not_imported", health: null, enabled: false, isolated: null,
         items7d: 0, lastOkAt: null, lastFetchAt: null, lastRunAt: null,
         lastRunStatus: null, lastFound: null, lastNew: null, lastError: null,
       };
