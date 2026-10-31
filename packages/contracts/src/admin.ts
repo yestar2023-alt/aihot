@@ -95,6 +95,7 @@ export interface AdminCurationRow {
   discovered_at: Timestamp;
   published_at: Timestamp | null;
   status: CurationStatus;
+  release_status: "published" | "withdrawn" | null;
   note: string;
   evidence_url: string | null;
   version: number;
