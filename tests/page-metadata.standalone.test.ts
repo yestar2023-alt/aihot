@@ -29,6 +29,7 @@ const api = createServer((req, res) => {
   res.setHeader("Content-Type", "application/json");
   const send = (value: unknown) => res.end(JSON.stringify(value));
   if (path === "/api/site/meta") return send({ changelogVersion: "fixture" });
+  if (path === "/api/site/signals") return send({ items: [] });
   if (path === "/api/site/timeline") return send({ filters: readFilters(url.searchParams), cards: [{ key: item.id, anchorAt: at, item, group: null }], nextCursor: null, hot: null, dayCounts: { "2026-10-04": 1 } });
   if (path === "/api/site/pool") return send({ filters: { ...readFilters(url.searchParams), q: url.searchParams.get("q"), tab: url.searchParams.get("tab") ?? "time" }, items: [item], page: Number(url.searchParams.get("page") ?? 1), pageCount: 3, total: 100, todayCount: 1, freshness: at });
   if (path === `/api/site/items/${item.id}`) return send(detail);
