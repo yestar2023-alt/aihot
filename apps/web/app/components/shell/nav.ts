@@ -104,7 +104,7 @@ const ENGINE_TABS: Tab[] = [
   { key: "featured", to: "/", label: "Home", icon: IconBolt },
   { key: "signals", to: "/signals", label: "Signals", icon: IconDoc },
   { key: "playbooks", to: "/playbooks", label: "Playbooks", icon: IconGrid },
-  { key: "me", to: "/more", label: "More", icon: IconUser },
+  { key: "me", to: "/newsletter", label: "Digest", icon: IconMessage },
 ];
 
 /** The tab bar: the engine's, the modules' before 我的. */
