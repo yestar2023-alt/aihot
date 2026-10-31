@@ -34,6 +34,7 @@ function SourceCard({ entry }: { entry: SourceCoverageEntry }) {
     <div className="flex flex-wrap items-start justify-between gap-3">
       <div className="min-w-0 flex-1">
         <h3 className="break-words text-[14px] font-semibold text-ink">{entry.name}</h3>
+        <p className="mt-1 text-[11px] text-ink-4">{entry.kind === "x_search" ? "X keyword search · disabled by default; provider access and costs required" : "RSS/Atom source"}</p>
         <p className="mt-0.5 break-all font-mono text-[11px] text-ink-4">{entry.id}</p>
       </div>
       <Badge tone={state.tone}>{state.label}</Badge>
