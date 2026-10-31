@@ -21,6 +21,9 @@
 - Manual X bookmarking: authenticated **`/admin/save-x`** browser form + `POST /api/admin/bookmark-x` (admin session + CSRF + private-source guard), alongside `scripts/bookmark-x.ts` for CLI. Both normalize X URLs, deduplicate through the existing external-ingest API and **do not retrieve tweet text** or fabricate timestamps.
 - `.env.example` defaults collection and model calls to disabled until an operator explicitly enables them.
 - Private editorial inbox: `/admin/curation`, `/api/admin/curation`, and `curation_reviews` migration. Editorial stages are `inbox → shortlisted → fact_checked → approved`, with rejection/reopening/revocation. Optimistic versions and audit log prevent silent overwrites. **Approved is only private editorial readiness; no public publication.**
+- **Explicit public Signals release:** `curation_releases` records an admin's separate publish/withdraw decision. A release must match the *current* approved review version, contain human-authored headline/summary, and retain a verified source; the public query rechecks source isolation, source enabled status and approval version every read.
+- Public `/signals` page (empty means no release), `GET /api/site/signals`, `/feed/signals.xml`, and conditional sitemap entry. Withdrawn or stale-review releases disappear from fresh API/RSS/HTML reads; shared caches are capped at 30 seconds (sitemap up to five minutes). Public entries link to the original creator and contain only editor-written summaries.
+- New tests for explicit release, no auto-publication, revocation, withdrawal and feed suppression.
 - New source form defaults to isolated; the original 4 marketing feeds and manual X source cannot be changed into auto-publication mode through the source administration API before a safe publication mechanism exists.
 - Original vector logo replaced; **PNG/ICO/Apple icons and nameplate assets still need replacement before public launch**.
 
@@ -42,9 +45,9 @@ Do not switch any candidate source to `editorial` or enable collection/model wor
 
 | Gap | Acceptance requirement |
 | --- | --- |
-| English frontend | Translate actual React Router interface copy and issue templates; only some config and prompts are English today. Do not set `locale=en-US` until the UI itself matches. |
+| English frontend | `/signals` is English, but the original AIHOT homepage, navigation and issue templates still contain Chinese copy. Do not set `locale=en-US` until the UI matches. |
 | Full source intake UI | `/admin/save-x` and `/admin/curation` exist. Extend link saving to GitHub and YouTube and attach richer content metadata. X post text remains unverified until licensed retrieval. |
-| Public publication approval | Private review inbox, audited transitions and private-source guard are implemented. **Still missing:** mapping approval to a publication with explicit human release action and blocking every public outlet until release. |
+| Public Signals release | **Implemented for the new Signals surfaces only:** explicit release and withdrawal, version-matched approval, API/RSS/page and conditional sitemap entry. Legacy AIHOT homepage/reports/feeds remain separate and must not be treated as the new editorial release pipeline. |
 | Publication gate | Public signals, SEO pages, RSS and daily/weekly reports must see only explicitly approved items (including an audit record). End-to-end negative tests required. |
 | Content schema | Separate sourced curated link, editorial insight, published issue and human-verified playbook; distinguish source claim vs editor test. No bulk spun SEO pages. |
 | X radar | Official/licensed API access check, source accounts/keywords, spend limits, 429 handling, deletion handling and admin controls; **not connected**. |
@@ -56,7 +59,7 @@ Do not switch any candidate source to `editorial` or enable collection/model wor
 
 ## Recommended next PR sequence
 
-1. **M1 — Explicit public release gate:** the private review inbox/state machine exists. Add a separate audited release action and enforce the release decision across all website, report, RSS, API, MCP and sitemap reads, with negative end-to-end tests.
+1. **M1 — Signals publish/withdraw:** separate audited release table and public Signals surfaces implemented. Validate the latest CI and smoke tests; do NOT merge the old AIHOT auto-selected report channels into this publication permission without equivalent gates.
 2. **M2 — English editorial UI:** migrate frontend copy and content rendering to English, implement curated signals and 1–2 human-authored playbooks with source traceability.
 3. **M3 — Content radar:** GitHub/RSS/YouTube metadata collection with observability, then licensed X radar only if credentials and budget are approved.
 4. **M4 — Newsletter & business:** verified email opt-in, Digest approval, provider send, templates and transparent Affiliate disclosure.
