@@ -61,7 +61,7 @@ function SourceCard({ entry }: { entry: SourceCoverageEntry }) {
           if (result) setPreview(result);
         }} className="text-[13px] font-medium text-accent underline disabled:opacity-50">
           {pending ? "Checking live feed…" : "Preview live feed (no import)"}
-        </button>
+        </button>}
       </> : <Link to="/admin/sources/new" className="text-[13px] font-medium text-accent hover:underline">Open private source setup →</Link>}
     </div>
     {preview && <div className="mt-3 rounded-control bg-bg-sunk p-3 text-[12px] text-ink-2" role="status">
