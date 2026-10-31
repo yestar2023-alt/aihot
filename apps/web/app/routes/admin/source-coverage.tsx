@@ -84,7 +84,7 @@ export default function SourceCoveragePage({ loaderData }: Route.ComponentProps)
     (lane === "all" || e.lanes.includes(lane)) && (!onlyIssues || e.state !== "observed_ok")
   ), [entries, lane, onlyIssues]);
   return <AdminPage title="Source Radar · Domain Coverage"
-    subtitle="A live database view of candidate feeds across 10 marketing disciplines. Configured does not mean the source has fetched successfully, and a successful fetch is not editorial verification."
+    subtitle="A database view of 22 RSS/Atom feeds and 10 disabled X keyword query presets across 10 marketing disciplines. No source is considered live solely because it exists in configuration."
     actions={<Link to="/admin/sources" className="rounded-control px-3 py-2 text-[13px] font-semibold text-accent ring-1 ring-line">All source settings →</Link>}
   >
     <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
