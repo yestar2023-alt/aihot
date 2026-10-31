@@ -120,7 +120,7 @@ export default function SourceCoveragePage({ loaderData }: Route.ComponentProps)
     </div>
     <Card title="What this dashboard does not claim" className="mt-8">
       <p className="text-[13px] leading-[1.9] text-ink-3">
-        These are 22 private RSS/Atom candidate feeds. Real-time X keyword search, video transcription, GitHub discovery and Reddit monitoring are separate integrations and are not represented as running here. Preview feeds one at a time, review URL/title/date quality, and keep full-text publication disabled without a verified license.
+        The catalog contains 22 private RSS/Atom candidates and 10 disabled X keyword queries. X access requires separately approved SocialData credentials and paid request ceilings. Video transcription, global GitHub discovery and Reddit monitoring are separate integrations and are not represented as running here. Preview feeds one at a time, review URL/title/date quality, and keep full-text publication disabled without a verified license.
       </p>
     </Card>
   </AdminPage>;
