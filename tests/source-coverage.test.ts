@@ -32,7 +32,7 @@ test("every configured marketing seed belongs to exactly one protected registry 
     assert.ok(groups.every(l => lanes.has(l)), `${id} has an unknown category`);
   }
   assert.equal(MARKETING_LANES.length, 10);
-  for (const lane of MARKETING_LANES) assert.ok(Object.values(MARKETING_SOURCE_LANES).some(x => x.includes(lane.id)));
+  for (const lane of MARKETING_LANES) assert.ok(Object.values(MARKETING_SOURCE_LANES).some(x => (x as readonly string[]).includes(lane.id)));
 });
 
 test("candidate feeds have no public or full-text side effects by default", () => {
