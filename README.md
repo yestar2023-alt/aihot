@@ -1,4 +1,4 @@
-<p align="center">
+> **This repository is being adapted into an English AI marketing curation project.** See [the implementation status and remaining milestones](docs/marketing-adaptation.md). The original AIHOT README below describes the upstream framework, not a finished or deployed AI Marketer Signal website.\n\n---\n\n<p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/assets/banner-dark.png">
     <img src="docs/assets/banner-light.png" alt="AIHOT：每个行业，都可以有自己的 AIHOT。很多条信源流进中间的精选，再分给法律、人力资源、金融等各个行业" width="100%">
