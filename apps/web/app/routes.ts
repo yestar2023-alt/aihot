@@ -51,6 +51,7 @@ export default [
     route("admin/save-source", "routes/admin/save-source.tsx"),
     route("admin/save-x", "routes/admin/save-x.tsx"),
     route("admin/curation", "routes/admin/curation.tsx"),
+    route("admin/digest", "routes/admin/digest.tsx"),
     route("admin/content", "routes/admin/content.tsx"),
     route("admin/content/:id", "routes/admin/content-item.tsx"),
     route("admin/sources", "routes/admin/sources.tsx"),
