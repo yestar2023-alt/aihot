@@ -85,6 +85,27 @@ export interface AdminAudit {
   rows: AdminAuditRow[];
 }
 
+// Private curation; `approved` is editorial readiness, not permission to publish.
+export type CurationStatus = "inbox" | "shortlisted" | "fact_checked" | "approved" | "rejected";
+export interface AdminCurationRow {
+  article_id: string;
+  title: string;
+  url: string;
+  source_name: string;
+  discovered_at: Timestamp;
+  published_at: Timestamp | null;
+  status: CurationStatus;
+  note: string;
+  evidence_url: string | null;
+  version: number;
+  updated_by: string | null;
+  updated_at: Timestamp | null;
+}
+export interface AdminCurationInbox {
+  rows: AdminCurationRow[];
+  counts: Record<string, number>;
+}
+
 // Sources
 
 /** Ordinary collectors may replace one another while retaining a source's identity and history. */
