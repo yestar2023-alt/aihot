@@ -1,6 +1,6 @@
 import { useLoaderData } from "react-router";
 import type { Route } from "./+types/signals";
-import type { SignalFeed } from "@aihot/backend/admin/curation-release";
+import type { SignalFeed } from "@aihot/contracts/signals";
 import { cachedPage, loadOr404, pageHeaders } from "../lib/api.server";
 import { pageMeta } from "../lib/seo";
 import { pageReuse } from "../lib/page-reuse";
