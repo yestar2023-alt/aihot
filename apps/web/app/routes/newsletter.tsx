@@ -3,7 +3,7 @@ import { pageMeta } from "../lib/seo";
 import type { Route } from "./+types/newsletter";
 import type { Screen } from "../components/shell/screens";
 
-export const handle: Screen = { tab: "featured", name: "The Digest" };
+export const handle: Screen = { tab: "me", name: "The Digest" };
 
 /** An actual Buttondown account is required; never invent a subscriber or claim delivery. */
 function validatedButtondownUsername(input: string | undefined): string | null {
