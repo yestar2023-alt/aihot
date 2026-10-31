@@ -16,6 +16,7 @@ import { compactAnswerFirstSummary, enforceIdentity, MAX_BODY_CHARS, parseTransl
 import { READER_WORDING } from "@aihot/industry/wording";
 import { SELECTION } from "@aihot/industry/selection";
 import { ITEM_TYPES } from "@aihot/industry/taxonomy";
+import { ITEM_COPY } from "@aihot/site";
 
 const T = tag();
 const SOURCE = `test-analyze-${T}`;
