@@ -37,6 +37,8 @@ export const headers: Route.HeadersFunction = () => ({ "Cache-Control": "no-stor
 function ReviewPanel({ row, onDone }: { row: AdminCurationRow; onDone: () => void }) {
   const [note, setNote] = useState(row.note);
   const [evidenceUrl, setEvidenceUrl] = useState(row.evidence_url ?? "");
+  const [headline, setHeadline] = useState("");
+  const [commentary, setCommentary] = useState("");
   const { run, pending } = useAdminAction();
   return (
     <Card title={`Review: ${row.title}`}>
@@ -61,7 +63,35 @@ function ReviewPanel({ row, onDone }: { row: AdminCurationRow; onDone: () => voi
           ))}
           <Button tone="ghost" onClick={onDone}>Close</Button>
         </div>
-        <p className="text-[12px] text-ink-3">Even “approved” items remain private. Public websites, RSS, API and newsletters do not use this approval yet.</p>
+        <div className="rounded-card border border-line bg-bg-sunk p-4 space-y-3">
+          <h3 className="text-[14px] font-semibold text-ink">Explicit public release</h3>
+          <p className="text-[12px] text-ink-3">An approved review stays PRIVATE until you click Publish Signal. Write original editorial copy, not a rephrased full thread. All actions are audited.</p>
+          {row.release_status === "published" && <p className="text-[12px] font-medium text-amber">A release record exists. If approval has changed, the signal is hidden until you explicitly release it again.</p>}
+          {row.status === "approved" && (
+            <>
+              <Field label="Public headline (15–140 characters)">
+                <Input value={headline} maxLength={140} onChange={e => setHeadline(e.target.value)} placeholder="How this workflow helps marketing teams..." />
+              </Field>
+              <Field label="Original editorial summary (80–700 characters)" hint="Include why it matters, whom it helps and a real limitation. Do not claim you tested the source if you did not.">
+                <Textarea rows={5} value={commentary} maxLength={700} onChange={e => setCommentary(e.target.value)} />
+              </Field>
+              <Button tone="primary" disabled={!!pending || headline.trim().length < 15 || commentary.trim().length < 80} busy={pending === "release-signal"} onClick={async () => {
+                const result = await run("POST", `/api/admin/curation/${encodeURIComponent(row.article_id)}/release`,
+                  { reviewVersion: row.version, title: headline, summary: commentary },
+                  { label: "release-signal", success: "Signal released publicly." });
+                if (result) onDone();
+              }}>Publish Signal</Button>
+            </>
+          )}
+          {row.release_status === "published" && (
+            <Button tone="danger" busy={pending === "withdraw-signal"} disabled={!!pending} onClick={async () => {
+              if (!window.confirm("Withdraw this Signal from the public page and RSS?")) return;
+              const result = await run("POST", `/api/admin/curation/${encodeURIComponent(row.article_id)}/withdraw`,
+                {}, { label: "withdraw-signal", success: "Signal withdrawn from public reads." });
+              if (result) onDone();
+            }}>Withdraw Signal</Button>
+          )}
+        </div>
       </div>
     </Card>
   );
@@ -90,6 +120,7 @@ export default function EditorialInbox({ loaderData }: Route.ComponentProps) {
                 <article key={row.article_id} className="rounded-card border border-line p-3">
                   <div className="mb-2 flex flex-wrap items-center gap-2">
                     <Badge>{row.status}</Badge>
+                    {row.release_status === "published" && <Badge tone="ok">Release recorded</Badge>}
                     <span className="text-[12px] text-ink-3">{row.source_name}</span>
                     <span className="text-[12px] text-ink-4">{new Date(row.discovered_at).toLocaleDateString("en-US")}</span>
                   </div>
