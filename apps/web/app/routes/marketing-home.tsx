@@ -5,7 +5,7 @@ import { SITE } from "@aihot/site";
 import { PLAYBOOKS } from "../content/playbooks";
 import { cachedPage, loadOr404 } from "../lib/api.server";
 import { pageReuse } from "../lib/page-reuse";
-import { pageMeta, siteLd } from "../lib/seo";
+import { pageMeta, organizationLd, siteUrl } from "../lib/seo";
 import type { Screen } from "../components/shell/screens";
 
 export const handle: Screen = { tab: "featured", name: "Home" };
@@ -18,7 +18,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   return cachedPage(30, { signals }, upstream);
 }
 export function meta() {
-  return pageMeta({ path: "/", jsonLd: siteLd() });
+  return pageMeta({ path: "/", jsonLd: [organizationLd(), { "@context": "https://schema.org", "@type": "WebSite", name: SITE.name, url: siteUrl(), inLanguage: "en-US", description: SITE.description }] });
 }
 export default function MarketingHome() {
   const { signals } = useLoaderData<typeof loader>();
