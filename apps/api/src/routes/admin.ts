@@ -22,6 +22,7 @@ import { ingestItems } from "@aihot/backend/ingest/items";
 import { sql } from "@aihot/backend/db";
 import { parseXPostUrl } from "@aihot/backend/ingest/x-bookmark";
 import { listCuration, updateCuration } from "@aihot/backend/admin/curation";
+import { releaseCuration, withdrawCuration } from "@aihot/backend/admin/curation-release";
 
 // What every admin route reads its request with (the modules' admin routes too).
 type Q = Record<string, string | undefined>;
@@ -78,6 +79,12 @@ export function registerAdmin(app: FastifyInstance) {
   app.get("/api/admin/curation", adminHandler(async req => listCuration(q(req).status)));
   app.post("/api/admin/curation/:id/review", adminHandler(async (req, reply, admin) =>
     orNotFound(req, reply, await updateCuration(param(req, "id"), body(req) as never, actorOf(admin)))));
+
+  // Explicit, auditable public release; private review approval alone never publishes.
+  app.post("/api/admin/curation/:id/release", adminHandler(async (req, reply, admin) =>
+    orNotFound(req, reply, await releaseCuration(param(req, "id"), body(req), actorOf(admin)))));
+  app.post("/api/admin/curation/:id/withdraw", adminHandler(async (req, reply, admin) =>
+    orNotFound(req, reply, await withdrawCuration(param(req, "id"), actorOf(admin)))));
 
   // Content and events
   app.get("/api/admin/content", adminHandler(async (req) => ({ rows: await searchContent(q(req).q ?? "") })));
