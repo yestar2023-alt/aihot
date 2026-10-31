@@ -114,7 +114,7 @@ export default function EditorialInbox({ loaderData }: Route.ComponentProps) {
         </div>
         {selected && <ReviewPanel key={selected.article_id + ":" + selected.version} row={selected} onDone={() => setChosen(null)} />}
         <Card title={`Candidate resources (${rows.length} shown)`}>
-          {rows.length === 0 ? <Empty>No resources in this stage. <Link className="text-accent underline" to="/admin/save-x">Save a public X post</Link> to start an inbox.</Empty> : (
+          {rows.length === 0 ? <Empty>No resources in this stage. <Link className="text-accent underline" to="/admin/save-source">Save a source link</Link> to start an inbox.</Empty> : (
             <div className="space-y-3">
               {rows.map(row => (
                 <article key={row.article_id} className="rounded-card border border-line p-3">
