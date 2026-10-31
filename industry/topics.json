@@ -422,6 +422,66 @@
         "Case Study"
       ],
       "definition": "Measurable marketing experiments and documented results, with source and limitations."
+    },
+    {
+      "slug": "paid-media-automation",
+      "name": "Paid ads automation",
+      "group": "field",
+      "tags": [
+        "Paid Ads",
+        "PPC"
+      ],
+      "definition": "AI-assisted Google Ads, Meta and Microsoft Advertising campaign workflows with spend, creative, tracking and approval controls."
+    },
+    {
+      "slug": "email-lifecycle-automation",
+      "name": "Email & lifecycle automation",
+      "group": "field",
+      "tags": [
+        "Email Marketing",
+        "Lifecycle",
+        "Email Deliverability"
+      ],
+      "definition": "Consent-aware email, segmentation, lead nurture and customer retention workflows with deliverability and compliance checks."
+    },
+    {
+      "slug": "ecommerce-marketing",
+      "name": "Ecommerce marketing",
+      "group": "field",
+      "tags": [
+        "Ecommerce"
+      ],
+      "definition": "Practical Shopify, product content, SMS/email commerce flows, merchandising, lifecycle automation and storefront measurement."
+    },
+    {
+      "slug": "conversion-optimization",
+      "name": "Conversion optimization",
+      "group": "field",
+      "tags": [
+        "Conversion Optimization",
+        "Marketing Experiments"
+      ],
+      "definition": "Evidence-based conversion experiments, landing-page analysis and marketing funnel optimizations."
+    },
+    {
+      "slug": "ai-search-visibility",
+      "name": "AI search visibility",
+      "group": "field",
+      "tags": [
+        "SEO",
+        "AEO"
+      ],
+      "definition": "Marketing search visibility and content distribution in traditional and AI-assisted search; separate evidence from claims."
+    },
+    {
+      "slug": "marketing-attribution",
+      "name": "Marketing attribution",
+      "group": "field",
+      "tags": [
+        "Attribution",
+        "Analytics"
+      ],
+      "definition": "GA4 and marketing measurement, reporting identity, conversion definitions and source-of-truth pipelines."
     }
   ]
 }
