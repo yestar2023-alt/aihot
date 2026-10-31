@@ -10,7 +10,8 @@ const config: { sources: Array<{
   site_fulltext: boolean;
   syndicate_fulltext: boolean;
   kind: string;
-  config: { feedUrl?: string; _aihot?: { initialBackfillLimit?: number } };
+  enabled?: boolean;
+  config: { feedUrl?: string; query?: string; searchType?: string; _aihot?: { initialBackfillLimit?: number } };
 }> } = JSON.parse(readFileSync(new URL("../industry/sources.json", import.meta.url), "utf8"));
 const at = new Date("2026-11-01T08:00:00.000Z");
 const baseline = {
@@ -22,7 +23,9 @@ const baseline = {
 
 test("every configured marketing seed belongs to exactly one protected registry entry", () => {
   const configIds = config.sources.map(source => source.id);
-  assert.equal(configIds.length, 22);
+  assert.equal(configIds.length, 32);
+  assert.equal(config.sources.filter(s => s.kind === "rss").length, 22);
+  assert.equal(config.sources.filter(s => s.kind === "x_search").length, 10);
   assert.equal(new Set(configIds).size, configIds.length);
   assert.deepEqual([...configIds].sort(), [...PRIVATE_MARKETING_SEED_IDS].sort());
   assert.deepEqual([...Object.keys(MARKETING_SOURCE_LANES)].sort(), [...configIds].sort());
@@ -37,12 +40,18 @@ test("every configured marketing seed belongs to exactly one protected registry 
 
 test("candidate feeds have no public or full-text side effects by default", () => {
   for (const source of config.sources) {
-    assert.equal(source.kind, "rss", source.id);
     assert.equal(source.participation_mode, "isolated", source.id);
     assert.equal(source.site_fulltext, false, source.id);
     assert.equal(source.syndicate_fulltext, false, source.id);
-    assert.match(source.config.feedUrl ?? "", /^https:\/\//);
-    assert.ok((source.config._aihot?.initialBackfillLimit ?? 0) <= 5, source.id);
+    if (source.kind === "rss") {
+      assert.match(source.config.feedUrl ?? "", /^https:\/\//, source.id);
+      assert.ok((source.config._aihot?.initialBackfillLimit ?? 0) <= 5, source.id);
+    } else {
+      assert.equal(source.kind, "x_search", source.id);
+      assert.equal(source.enabled, false, source.id);
+      assert.equal(source.config.searchType, "Latest", source.id);
+      assert.ok(typeof source.config.query === "string" && source.config.query.includes("-filter:replies"), source.id);
+    }
   }
 });
 
