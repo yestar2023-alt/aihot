@@ -6,7 +6,7 @@ import { pageMeta } from "../lib/seo";
 import { pageReuse } from "../lib/page-reuse";
 import type { Screen } from "../components/shell/screens";
 
-export const handle: Screen = { tab: "featured", name: "Signals" };
+export const handle: Screen = { tab: "signals", name: "Signals" };
 export const headers = pageHeaders;
 export const { clientLoader, shouldRevalidate } = pageReuse<typeof loader>();
 
