@@ -1,74 +1,78 @@
-# AI Marketer Signal — AIHOT adaptation status (first implementation slice)
+# AI Marketer Signal — implementation and launch handbook
 
-> **Development branch, NOT ready to deploy.** Working name and brand are provisional. This is an adaptation of the existing AIHOT engine (MIT license); keep LICENSE and NOTICE. Do not reuse AIHOT's trademark or raster logos.
+> **Status: substantial working MVP code on a development PR, NOT a live production service.** Provisional brand/domain. Existing AIHOT engine under MIT license; preserve its LICENSE and NOTICE. Never assume connected platform APIs or mailing-list services exist until credentials, permissions and live tests confirm them.
 
-## Product contract
+## Product boundary
 
-- Audience: English-speaking content, social, growth and lifecycle marketing operators.
-- Promise: **Less AI noise. More useful marketing workflows.**
-- Primary output: curated, attributed signals and occasional reproducible marketing playbooks, not an AI tools directory.
-- Research sources: RSS, X links, GitHub repositories, YouTube tutorials, official documentation and validated marketing case studies.
-- Monetization later: disclosed tool Affiliate links, tested template downloads and services.
-- Newsletter: optional digest distribution **after** the editorial review and email-consent workflow exists. Existing AIHOT daily/weekly report generation is **not** a mailing-list sender.
-- Chinese market: no translated duplicates or WeChat/Xiaohongshu tutorials in v1. Different platforms need independent verification.
+AI Marketer Signal is an **English-first, task-led editorial publication for marketers**, not an AI-tool directory or a mass AI-news rewrite site. Three work streams: curated source-linked Signals, source-led Playbooks, and a biweekly Digest. Source discovery is primarily internal; publication always requires human action.
 
-## Implemented on this branch
+## Implemented code
 
-- Renamed site identity and SEO description to provisional **AI Marketer Signal**.
-- Marketing-operations taxonomy and job-centric topics replace generic model/news categories.
-- Candidate sources: n8n Blog, Buffer Resources, HubSpot Marketing Blog and Make Blog. Each imports with `participation_mode: isolated`, `site_fulltext: false`, `syndicate_fulltext: false`. Source retrieval compatibility still needs live preview.
-- Editorial prompts prioritize real workflows, evidence, limitations and the reader's task rather than model launches and funding news.
-- Manual X bookmarking: authenticated **`/admin/save-x`** browser form + `POST /api/admin/bookmark-x` (admin session + CSRF + private-source guard), alongside `scripts/bookmark-x.ts` for CLI. Both normalize X URLs, deduplicate through the existing external-ingest API and **do not retrieve tweet text** or fabricate timestamps.
-- `.env.example` defaults collection and model calls to disabled until an operator explicitly enables them.
-- Private editorial inbox: `/admin/curation`, `/api/admin/curation`, and `curation_reviews` migration. Editorial stages are `inbox → shortlisted → fact_checked → approved`, with rejection/reopening/revocation. Optimistic versions and audit log prevent silent overwrites. **Approved is only private editorial readiness; no public publication.**
-- **Explicit public Signals release:** `curation_releases` records an admin's separate publish/withdraw decision. A release must match the *current* approved review version, contain human-authored headline/summary, and retain a verified source; the public query rechecks source isolation, source enabled status and approval version every read.
-- Public `/signals` page (empty means no release), `GET /api/site/signals`, `/feed/signals.xml`, and conditional sitemap entry. Withdrawn or stale-review releases disappear from fresh API/RSS/HTML reads; shared caches are capped at 30 seconds (sitemap up to five minutes). Public entries link to the original creator and contain only editor-written summaries.
-- New tests for explicit release, no auto-publication, revocation, withdrawal and feed suppression.
-- New source form defaults to isolated; the original 4 marketing feeds and manual X source cannot be changed into auto-publication mode through the source administration API before a safe publication mechanism exists.
-- Original vector logo replaced; **PNG/ICO/Apple icons and nameplate assets still need replacement before public launch**.
+| Layer | Implementation |
+|---|---|
+| English front door | New `/` marketing home, `/signals`, `/playbooks`, `/playbooks/:slug`, `/newsletter`, `/about`, and English draft legal pages `/terms` and `/privacy`. Main navigation and wordmark are English. Previous engine home is preserved under **noindex `/archive`** for regression analysis. |
+| Editorial Playbooks | Three original, English task-led guides: content repurposing, weekly GA4 reporting, and RSS editorial intake. Each states prerequisites, steps, checklists, pitfalls, official-source URLs and **not independently tested** status. No invented workflow tests or downloads. Data is shared in `site/playbooks.ts` for site and sitemap. |
+| Intake | Authenticated `/admin/save-source` and `POST /api/admin/bookmark` normalize X/Twitter statuses, GitHub repositories/releases/issues, and YouTube videos. Only metadata and canonical URL enter the system. Existing `/admin/save-x` and CLI remain supported. No platform scraping/API calls. |
+| Six candidate feeds | n8n Blog, Buffer Resources, HubSpot Marketing Blog, Make Blog, n8n GitHub releases Atom, n8n YouTube channel RSS. All seeded as **isolated**, no full-text republication or automatic release. **Must test actual parser compatibility, live HTTP access and backfill boundaries.** |
+| Curation | `/admin/curation` with `inbox → shortlisted → fact_checked → approved`, rejection/reopening/revocation, source evidence, detailed notes, optimistic versions and transactional audits. A fact-check requires an HTTPS evidence URL and explanatory note. |
+| Publishing | A **separate explicit admin release** is required after approval. `curation_releases` records a human-written title/summary, review version and release/withdraw events. Public query rechecks current approval, review version, source isolation, source enabled flag and release state. |
+| Public releases | `/signals`, `GET /api/site/signals`, `/feed/signals.xml`; short caching and withdraw. Playbooks and, when released, Signals are included in sitemap. **The legacy AIHOT automatic news/report channels are not this editorial release system.** |
+| Digest | `/admin/digest` builds an editable Markdown draft from *publicly released* Signals plus linked Playbooks. Sending is deliberately manual until a verified provider is connected; editing does not auto-email. |
+| Email opt-in | `/newsletter` supports Buttondown's standard HTML `POST /api/emails/embed-subscribe/{username}` flow (not JavaScript fetch). It remains disabled without `BUTTONDOWN_USERNAME`; no fake signup or claims of sends. |
+| Operational safety | Collection/model calls default off in `.env.example`. Seed feeds and manual bookmark source IDs are protected from being switched to automatic publication by ordinary source edits. |
 
-## Exercise private X link bookmarking (local development)
+## Local run / smoke test
 
-1. Read `AGENTS.md`, `docs/deploy.md` and `docs/sources.md`. Use Node.js 24+, PostgreSQL 17 and Docker Compose if you want the full application.
-2. Generate `.env` using `node scripts/init-env.ts`. Do not commit it. Set `INGEST_TOKEN` to a unique random secret of at least 16 characters and keep `COLLECT_ENABLED=false` / `MODEL_CALLS_ENABLED=false`.
-3. Start the app locally and sign into `/admin`. Use the **Save X post** menu (`/admin/save-x`), paste a genuine public post URL and submit; it invokes `/api/admin/bookmark-x` through the existing authenticated and CSRF-protected admin API. Alternatively, use the CLI with a real **public** URL:
-   ```bash
-   node --env-file-if-exists=.env scripts/bookmark-x.ts 'https://x.com/creator/status/1234567890123456789'
-   ```
-   Replace the example with a real URL. The script sends only the canonical URL and a placeholder title to `POST /api/ingest/items`.
-4. The importer creates an `external` source with ID `manual-x-bookmarks`; the framework defaults newly created external sources to **isolated**, not public. Verify it in `/admin`. Repeated URLs should return zero newly created entries. No X API key is required to bookmark a URL; reading the post content requires a separate licensed source.
-5. Run `node --test tests/bookmark-x.test.ts` to validate local bookmark parsing without hitting X.
+1. Follow `AGENTS.md`, `docs/deploy.md` and `docs/sources.md`. Use Node.js **24.22.1+**, PostgreSQL **17** and the repo's Docker Compose configuration.
+2. `npm ci`, generate `.env` with `node scripts/init-env.ts` and use **unique, private secrets**. Keep `COLLECT_ENABLED=false` and `MODEL_CALLS_ENABLED=false` initially.
+3. Apply migrations with `npm run db:migrate`. Back up the database before an existing-instance migration.
+4. Run services per the repository's normal development or Docker deployment guide. Test `/api/health`, `/`, `/playbooks`, each Playbook detail, `/signals`, `/feed/signals.xml`, and the authenticated `/admin`.
+5. In admin: save a real public X/GitHub/YouTube URL at `/admin/save-source`, verify private source and no public appearance, then exercise each editorial review stage. A review marked **approved** must still be invisible publicly.
+6. Write a short *original*, sourced public title/summary and click **Publish Signal**. Check page/API/RSS and that a subsequent **Withdraw** removes it from fresh responses. Expect up to **30 seconds** of shared cache (and up to five minutes for a prebuilt sitemap). Verify all public/private checks again after modifying a review.
+7. Run `npm run typecheck`, `npm test`, and `npm run test:standalone`, plus `npm run build -w @aihot/web` and the CI's browser tests. Only claim checks that **actually passed on the exact latest commit**.
 
-Do not switch any candidate source to `editorial` or enable collection/model workers on a public deployment until the human approval gate and content rights review exist. Already imported generic demo sources are **not deleted** by changing `industry/sources.json`; pause them in admin on existing databases.
+## Feed operations: no purchased APIs required for first look
 
-## Explicitly NOT finished
+- Seed sources come from `industry/sources.json`. Initial backfill is limited to five items per source. Inspect the **source preview** in admin and verify item URLs, original author, date precision and whether YouTube Atom and GitHub releases Atom parse on your host.
+- Because the source seed is **import-only**, removing entries from that file does **not** remove previous sources from an existing PostgreSQL instance. Disable old generic AIHOT feeds manually in admin and verify none remain publicly selected.
+- Once the fetch behavior, copyright position and cost/quotas are confirmed, enable collection with a scoped provider/budget. AI model ranking alone must **not** publish.
+- X account/search monitoring via AIHOT's existing third-party integration is **not configured**. For now X URL intake works without an X API key; reading X post text automatically requires licensed and cost-controlled access.
+- YouTube video and GitHub URLs saved manually are placeholders until an editor checks the originals. Do not treat a bookmark as a scrape, transcript or published finding.
 
-| Gap | Acceptance requirement |
-| --- | --- |
-| English frontend | `/signals` is English, but the original AIHOT homepage, navigation and issue templates still contain Chinese copy. Do not set `locale=en-US` until the UI matches. |
-| Full source intake UI | `/admin/save-x` and `/admin/curation` exist. Extend link saving to GitHub and YouTube and attach richer content metadata. X post text remains unverified until licensed retrieval. |
-| Public Signals release | **Implemented for the new Signals surfaces only:** explicit release and withdrawal, version-matched approval, API/RSS/page and conditional sitemap entry. Legacy AIHOT homepage/reports/feeds remain separate and must not be treated as the new editorial release pipeline. |
-| Publication gate | Public signals, SEO pages, RSS and daily/weekly reports must see only explicitly approved items (including an audit record). End-to-end negative tests required. |
-| Content schema | Separate sourced curated link, editorial insight, published issue and human-verified playbook; distinguish source claim vs editor test. No bulk spun SEO pages. |
-| X radar | Official/licensed API access check, source accounts/keywords, spend limits, 429 handling, deletion handling and admin controls; **not connected**. |
-| GitHub / YouTube discovery | Source permissions, rate limits, clean incrementals, evidence and retrieval-status reporting. |
-| Newsletter | Double opt-in when appropriate, unsubscribe, provider webhooks and human-send approval; **no email has been configured or sent**. |
-| Asset/legal rollout | Replace all raster branded assets, write real Terms/Privacy and consent, add Affiliate disclosure, verify licensing and source opt-outs. |
-| Quality checks | GitHub CI runs typecheck, database tests, web build, browser tests and Docker. Check the PR's **latest commit** checks; an earlier run failed on legacy navigation fixture labels, which were updated. Feed previews still need a live trial. |
-| Production | Domain, hosting, credentials, backups, monitoring, billing approval and manual go-live review. Not authorized or performed. |
+## Newsletter integration
 
-## Recommended next PR sequence
+1. Create a real Buttondown publication under your own account and verify the hosted signup URL, confirmation/CAPTCHA behavior, unsubscribe flow and privacy disclosure.
+2. Set `BUTTONDOWN_USERNAME=your-actual-handle` in the runtime environment, deploy/restart, and submit a real test address. Follow the provider's own end-to-end confirmation to verify that the address enters the **correct** list.
+3. Prepare the actual issue using `/admin/digest`. Its draft is editable but **not stored and not sent** from this app. Copy only after editorial sign-off into Buttondown or another approved sending provider.
+4. Only later consider automated draft creation and a manually approved scheduled send with authenticated provider API, unsubscribe handling, logs and delivery-idempotency tests. Do not enable automatic email sending on day one.
 
-1. **M1 — Signals publish/withdraw:** separate audited release table and public Signals surfaces implemented. Validate the latest CI and smoke tests; do NOT merge the old AIHOT auto-selected report channels into this publication permission without equivalent gates.
-2. **M2 — English editorial UI:** migrate frontend copy and content rendering to English, implement curated signals and 1–2 human-authored playbooks with source traceability.
-3. **M3 — Content radar:** GitHub/RSS/YouTube metadata collection with observability, then licensed X radar only if credentials and budget are approved.
-4. **M4 — Newsletter & business:** verified email opt-in, Digest approval, provider send, templates and transparent Affiliate disclosure.
-5. **M5 — Production QA:** clean database migration and build, privacy, SEO, accessibility, original brand assets, feed tests and deployment approval.
+Official integration guide: https://docs.buttondown.com/building-your-subscriber-base
 
-## Editorial and licensing guardrails
+## Open release blockers — cannot be truthfully claimed completed without operator inputs
 
-- Keep source title, author, publisher, URL and date when known; distinguish unknown dates. Use short original commentary with a clear link back.
-- No full-thread scraping, blanket rehosting, misleading attribution or automatic paraphrase-only SEO pages.
-- No fabricated workflow tests, costs, performance, rankings or API capabilities.
-- Use provider APIs only when access and cost are known. The old AIHOT SocialData X integration is **not** connected by this branch.
-- Labels and ranking are *recommendations* until human-reviewed; they do not grant copyright permission.
+| Blocker | What remains |
+|---|---|
+| CI and live smoke | Confirm latest PR CI is fully green; check working deployment against real PostgreSQL and one real source from each feed family. |
+| Domain & hosting | Choose/register a non-conflicting brand/domain, provide SITE_URL and deploy with secret-backed Postgres, HTTPS, backup, monitoring and access restrictions. Do not deploy in this PR by default. |
+| Newsletter | Actual Buttondown publication username, verified consent flow and sender account; no email addresses can be collected until then. |
+| Legal | Provide genuine business contact and privacy/controller identity; review hosting/analytics/cookies, original media rights, affiliate disclosure and legal drafts. Legal drafts are **noindex**. |
+| Branding | Replace any remaining raster PNG/ICO/Apple touch icons inherited from the template; only the original vector and JSX wordmark were replaced. |
+| Discovery | Confirm seeded RSS/Atom compatibility on the runtime. Automated X monitoring requires a license, credentials and spend cap. |
+| Content | Publish verified Signals via the editor and add more firsthand-tested Playbooks; the starting three are research-backed designs, not personally tested downloads. |
+| Legacy routes | Original `/all`, `/items`, reports, feeds and MCP still exist in the engine for compatibility. They must be explicitly retired or isolated (including sitemap and SEO policy) before production launch, rather than accidentally exposing old generic AI news. |
+| Business | Real Affiliate agreements, pricing, licensing for templates, payment provider and fulfillment are intentionally **not** invented or activated. |
+
+## Editorial safety rules
+
+- Attribute source author, first-party link and original date where known. Do not invent timestamps, costs, performance data or platform API permission.
+- Do not copy/rehost full copyrighted articles, X threads or videos. A source link is not reproduction permission.
+- All AI summaries and candidate rankings stay private until human evidence review plus separate publication command.
+- A guide derived from official documentation must carry a **documented, not independently tested** label; change this only after recording reproducible test evidence.
+- Do not auto-send newsletters, buy domains, activate paid endpoints, or deploy production without verified credentials and operator approval.
+
+## Pull request checkpoints
+
+1. Review all changed files, verify inherited license and source-mode guards.
+2. Require GitHub Actions checks **on the latest commit**, not earlier cancelled/failing runs.
+3. Run full local/browser smoke across desktop/mobile; verify home/playbook SSR, metadata, robots and sitemap.
+4. Provision external accounts/contacts separately, then make a dedicated launch PR.
