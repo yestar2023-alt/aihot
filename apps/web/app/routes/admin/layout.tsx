@@ -38,6 +38,7 @@ const nav = (): Array<{ group: string; items: AdminNavEntry[] }> => [
     group: "内容",
     items: [
       { to: "/admin/curation", label: "Editorial Inbox" },
+      { to: "/admin/digest", label: "Digest draft" },
       { to: "/admin/save-source", label: "Save source link" },
       { to: "/admin/save-x", label: "X-only legacy saver" },
       { to: "/admin/content", label: "内容诊断" },
