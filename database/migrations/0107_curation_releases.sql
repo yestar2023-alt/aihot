@@ -6,7 +6,6 @@ CREATE TABLE IF NOT EXISTS curation_releases (
   summary text NOT NULL,
   review_version integer NOT NULL,
   status text NOT NULL CHECK (status IN ('published', 'withdrawn')),
-  first_released_at timestamptz NOT NULL DEFAULT now(),
   released_at timestamptz NOT NULL DEFAULT now(),
   updated_by text NOT NULL,
   updated_at timestamptz NOT NULL DEFAULT now()
