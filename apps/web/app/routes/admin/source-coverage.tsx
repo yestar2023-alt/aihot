@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router";
 import type { Route } from "./+types/source-coverage";
-import type { AdminSourceCoverage, SourceCoverageEntry, SourceCoverageState } from "@aihot/contracts/admin";
+import type { AdminSourceCoverage, AdminSourcePreview, SourceCoverageEntry, SourceCoverageState } from "@aihot/contracts/admin";
+import { useAdminAction } from "../../features/admin/action";
 import { SITE } from "@aihot/site";
 import { adminGet } from "../../lib/admin.server";
 import { AdminPage, Badge, Card, Stat } from "../../features/admin/ui";
@@ -27,6 +28,8 @@ export const headers: Route.HeadersFunction = () => ({ "Cache-Control": "no-stor
 
 function SourceCard({ entry }: { entry: SourceCoverageEntry }) {
   const state = STATE[entry.state];
+  const [preview, setPreview] = useState<AdminSourcePreview | null>(null);
+  const { run, pending } = useAdminAction();
   return <article className="rounded-card border border-line bg-surface p-4">
     <div className="flex flex-wrap items-start justify-between gap-3">
       <div className="min-w-0 flex-1">
@@ -47,9 +50,29 @@ function SourceCard({ entry }: { entry: SourceCoverageEntry }) {
     </div>
     {entry.lastError && <p className="mt-3 break-words rounded-control bg-hot-soft p-2 text-[12px] text-hot">{entry.lastError}</p>}
     <div className="mt-4 flex flex-wrap gap-3">
-      {entry.state !== "not_imported" ? <Link to={`/admin/sources/${encodeURIComponent(entry.id)}`} className="text-[13px] font-medium text-accent hover:underline">Details / preview →</Link>
-        : <Link to="/admin/sources/new" className="text-[13px] font-medium text-accent hover:underline">Import as private candidate →</Link>}
+      {entry.state !== "not_imported" ? <>
+        <Link to={`/admin/sources/${encodeURIComponent(entry.id)}`} className="text-[13px] font-medium text-accent hover:underline">Details →</Link>
+        <button type="button" disabled={!!pending} onClick={async () => {
+          setPreview(null);
+          const result = await run<AdminSourcePreview>("POST",
+            `/api/admin/sources/${encodeURIComponent(entry.id)}/preview`, undefined,
+            { label: "preview:" + entry.id, revalidate: false });
+          if (result) setPreview(result);
+        }} className="text-[13px] font-medium text-accent underline disabled:opacity-50">
+          {pending ? "Checking live feed…" : "Preview live feed (no import)"}
+        </button>
+      </> : <Link to="/admin/sources/new" className="text-[13px] font-medium text-accent hover:underline">Open private source setup →</Link>}
     </div>
+    {preview && <div className="mt-3 rounded-control bg-bg-sunk p-3 text-[12px] text-ink-2" role="status">
+      <p className="font-semibold">Preview: {preview.count} parsed items in {preview.ms} ms. No rows saved.</p>
+      {preview.count === 0 && <p className="mt-1">Empty preview: check the original feed and filters manually.</p>}
+      <ul className="mt-2 space-y-2">
+        {preview.items.slice(0,3).map(item => <li key={item.url} className="break-words">
+          <a target="_blank" rel="noopener noreferrer" className="text-accent underline" href={item.url}>{item.title}</a>
+          <span className="ml-2 text-ink-4">{item.publishedAt ? new Date(item.publishedAt).toLocaleDateString("en-US") : "Date unverified"}</span>
+        </li>)}
+      </ul>
+    </div>}
   </article>;
 }
 export default function SourceCoveragePage({ loaderData }: Route.ComponentProps) {
