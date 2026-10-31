@@ -51,7 +51,7 @@ export function CategoryTabs({ base, category, channel = "all", layoutId, classN
  * The phone bar of 精选 and 全部: the brand, the 精选 | 全部 switch (a filter in use carries over), and
  * buttons for the filter sheet and search.
  */
-export function FeedBar({ base, category, channel }: { base: "/" | "/all"; category: CategoryKey | null; channel: ChannelKey }) {
+export function FeedBar({ base, category, channel }: { base: "/" | "/all" | "/archive"; category: CategoryKey | null; channel: ChannelKey }) {
   const [params] = useSearchParams();
   const [sheet, setSheet] = useState(false);
   const scope = (to: string) => hrefWith(to, params, { q: null, tab: null, search: null });
@@ -69,9 +69,9 @@ export function FeedBar({ base, category, channel }: { base: "/" | "/all"; categ
             size="sm"
             layoutId="feed-scope"
             label="看精选或全部"
-            active={base === "/" ? "featured" : "all"}
+            active={base === "/all" ? "all" : "featured"}
             items={[
-              { key: "featured", label: "精选", to: scope("/"), resetScroll: true, prefetchOnPress: true },
+              { key: "featured", label: base === "/archive" ? "旧资料" : "精选", to: scope(base === "/archive" ? "/archive" : "/"), resetScroll: true, prefetchOnPress: true },
               { key: "all", label: "全部", to: scope("/all"), resetScroll: true, prefetchOnPress: true },
             ]}
           />
