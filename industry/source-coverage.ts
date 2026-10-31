@@ -1,5 +1,5 @@
 /**
- * Editorial source registry: one canonical mapping from private feed seeds to marketing lanes.
+ * Editorial source registry: one canonical mapping from private feed and disabled X keyword seeds to marketing lanes.
  * Catalog presence is never evidence that a feed URL currently works or that a site is live.
  */
 export const MARKETING_LANES = [
@@ -16,7 +16,7 @@ export const MARKETING_LANES = [
 ] as const;
 export type MarketingLane = (typeof MARKETING_LANES)[number]["id"];
 
-/** Each catalog entry is metadata only; the live feed URL and participation live in sources.json.
+/** Each catalog entry is metadata only; the feed URL, API query, enabled flag and participation live in sources.json.
  * All seeds are private until a separately audited human release has taken place.
  */
 export const MARKETING_SOURCE_LANES = {
@@ -42,6 +42,16 @@ export const MARKETING_SOURCE_LANES = {
   "rss-practical-ecommerce": ["commerce", "growth"],
   "rss-lennys-newsletter": ["growth", "content"],
   "rss-hubspot-sales": ["email", "growth"],
+  "x-auto-marketing": ["automation"],
+  "x-seo-automation": ["seo"],
+  "x-social-automation": ["social"],
+  "x-paid-media": ["paid"],
+  "x-content-repurposing": ["content"],
+  "x-email-lifecycle": ["email"],
+  "x-analytics-reporting": ["analytics"],
+  "x-ecommerce-growth": ["commerce"],
+  "x-growth-experiments": ["growth"],
+  "x-agent-marketing": ["automation", "platform"],
 } as const satisfies Record<string, readonly MarketingLane[]>;
 
 export const PRIVATE_MARKETING_SEED_IDS: readonly string[] = Object.keys(MARKETING_SOURCE_LANES);
