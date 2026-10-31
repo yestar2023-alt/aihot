@@ -12,7 +12,11 @@ const modulePages: RouteConfigEntry[] = MODULES.flatMap((m) =>
 );
 
 export default [
-  index("routes/home.tsx"),
+  index("routes/marketing-home.tsx"),
+  route("archive", "routes/home.tsx"),
+  route("playbooks", "routes/playbooks.tsx"),
+  route("playbooks/:slug", "routes/playbook.tsx"),
+  route("newsletter", "routes/newsletter.tsx"),
   route("all", "routes/all.tsx"),
   route("signals", "routes/signals.tsx"),
   route("all/search-busy", "routes/search-busy.tsx", { id: "all-search-busy" }),
