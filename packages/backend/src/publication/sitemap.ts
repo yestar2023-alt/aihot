@@ -3,6 +3,7 @@
 import { mkdir, readFile, stat, utimes, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { ABOUT, ACCESS, AGENT, POLICY, SITE } from "@aihot/site";
+import { PLAYBOOKS } from "@aihot/site/playbooks";
 import { config, REPO_ROOT } from "../config.ts";
 import { sha256, stableJson } from "../lib/ids.ts";
 import { loadChangelog } from "../site/meta.ts";
@@ -68,6 +69,14 @@ export async function loadDiscoveryEntries(at = new Date(), limits?: { stories: 
     { loc: "/privacy", revision: sha256(stableJson([POLICY.privacy, await readFile(path.join(REPO_ROOT, "site/pages/privacy.md"), "utf8")])), changefreq: "monthly", priority: 0.4 },
     { loc: "/changelog", revision: sha256(stableJson(loadChangelog())), changefreq: "weekly", priority: 0.5 },
   );
+  // Editorial Playbooks are authored in the repository, reviewed and linked to source docs.
+  // Index only these intentionally published paths, not auto-generated rewrites.
+  entries.push({ loc: "/playbooks", revision: sha256(stableJson(PLAYBOOKS.map(p => [p.slug,p.lastReviewed]))), changefreq: "weekly", priority: 0.9 });
+  for (const p of PLAYBOOKS) {
+    entries.push({ loc: `/playbooks/${p.slug}`, lastmod: new Date(p.lastReviewed + "T00:00:00Z"),
+      revision: sha256(stableJson(p)), changefreq: "monthly", priority: 0.8 });
+  }
+  entries.push({ loc: "/newsletter", revision: sha256("digest-editorial-landing-v1"), changefreq: "monthly", priority: 0.5 });
   // A list page enters discovery only when at least one expressly released signal is public.
   // Withdrawal removes the entry from fresh sitemap inventory as well as public reads.
   const publishedSignals = await publicCuration(50);
