@@ -67,7 +67,7 @@ export async function sourceCoverage(): Promise<AdminSourceCoverage> {
       };
     }
     return {
-      id, name: row.name, lanes, state: candidateState(row, now), health: row.health,
+      id, name: row.name, kind: row.kind, lanes, state: candidateState(row, now), health: row.health,
       enabled: row.enabled, isolated: row.participation_mode === "isolated",
       items7d: row.items_7d, lastOkAt: row.last_ok_at?.toISOString() ?? null,
       lastFetchAt: row.last_fetch_at?.toISOString() ?? null, lastRunAt: row.run_started_at?.toISOString() ?? null,
