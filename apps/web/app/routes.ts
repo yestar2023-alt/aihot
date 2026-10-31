@@ -48,6 +48,7 @@ export default [
   // A site without admin pages (null ADMIN settings) answers 404 here (the layout); signing in serves every site.
   layout("routes/admin/layout.tsx", { id: "admin-layout" }, [
     route("admin", "routes/admin/index.tsx"),
+    route("admin/save-source", "routes/admin/save-source.tsx"),
     route("admin/save-x", "routes/admin/save-x.tsx"),
     route("admin/curation", "routes/admin/curation.tsx"),
     route("admin/content", "routes/admin/content.tsx"),
