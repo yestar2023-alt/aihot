@@ -4,9 +4,17 @@ import { SITE } from "../site.ts";
 
 export function Wordmark({ size = 24, className = "", title = SITE.name }: { size?: number; className?: string; title?: string }) {
   return (
-    <span className={`inline-flex items-center font-black leading-none tracking-[-0.03em] ${className}`} style={{ fontSize: Math.round(size * 0.92) }} aria-label={title} role="img">
-      <span aria-hidden="true" className="mr-[0.3em] inline-block size-[0.42em] rounded-full bg-accent" />
-      <span aria-hidden="true">{SITE.name}</span>
+    <span className={`inline-flex min-w-0 items-center gap-2.5 ${className}`} aria-label={title} role="img">
+      <svg viewBox="0 0 48 48" width={Math.max(26, size + 5)} height={Math.max(26, size + 5)} aria-hidden="true" className="shrink-0">
+        <rect x="0" y="0" width="48" height="48" rx="12" fill="#172238"/>
+        <circle cx="13" cy="34" r="4" fill="#9B9BFF"/>
+        <path d="M17 33C26 32 32 24 32 15M17 33C31 30 38 22 39 11" fill="none" stroke="#9B9BFF" strokeWidth="3" strokeLinecap="round"/>
+        <path d="m35 8 7 1-3 6" fill="none" stroke="#56DFD4" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+      <span className="flex min-w-0 flex-col leading-[1.15] tracking-tight">
+        <span className="whitespace-nowrap text-[12px] font-bold uppercase text-ink">AI Marketer</span>
+        <span className="whitespace-nowrap text-[16px] font-black text-accent">Signal</span>
+      </span>
     </span>
   );
 }
