@@ -21,6 +21,7 @@ import { adminHandler } from "./admin-auth.ts";
 import { ingestItems } from "@aihot/backend/ingest/items";
 import { sql } from "@aihot/backend/db";
 import { parseXPostUrl } from "@aihot/backend/ingest/x-bookmark";
+import { listCuration, updateCuration } from "@aihot/backend/admin/curation";
 
 // What every admin route reads its request with (the modules' admin routes too).
 type Q = Record<string, string | undefined>;
@@ -72,6 +73,11 @@ export function registerAdmin(app: FastifyInstance) {
   }));
   app.post("/api/admin/sources/:id/preview", adminHandler(async (req, reply) => orNotFound(req, reply, await previewStoredSource(param(req, "id")))));
   app.post("/api/admin/sources/:id/fetch", adminHandler(async (req, reply, admin) => orNotFound(req, reply, await fetchNow(param(req, "id"), actorOf(admin)))));
+
+  // Private editorial inbox: state changes are audited; approval does not publish.
+  app.get("/api/admin/curation", adminHandler(async req => listCuration(q(req).status)));
+  app.post("/api/admin/curation/:id/review", adminHandler(async (req, reply, admin) =>
+    orNotFound(req, reply, await updateCuration(param(req, "id"), body(req) as never, actorOf(admin)))));
 
   // Content and events
   app.get("/api/admin/content", adminHandler(async (req) => ({ rows: await searchContent(q(req).q ?? "") })));
