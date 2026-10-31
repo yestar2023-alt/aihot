@@ -119,6 +119,13 @@ export async function previewSource(draft: Pick<SourceRow, "id" | "kind" | "conf
 /** A class of the industry pack (industry/selection.ts), or none. */
 const SelectionClass = z.string().refine((c) => Object.hasOwn(SELECTION.classes, c), { message: "不是行业包里的信源类别" }).nullable();
 
+// Curated seed feeds and manual bookmarks must not be converted to auto-published news sources
+// until the public approval gate is independently tested on all public reading surfaces.
+const PRIVATE_CURATED_SOURCE_IDS = new Set([
+  "manual-x-bookmarks",
+  "rss-n8n-blog", "rss-buffer-resources", "rss-hubspot-marketing", "rss-make-blog",
+]);
+
 const EDITABLE = z
   .object({
     name: z.string().min(1).max(200),
@@ -158,6 +165,9 @@ async function saveSource(id: string, patch: z.infer<typeof EDITABLE>, input: { 
     if (patch.config) await tx`SELECT pg_advisory_xact_lock(hashtext('admin-source-identity'))`;
     const [before] = await tx`SELECT * FROM sources WHERE id = ${id} FOR UPDATE`;
     if (!before) return null;
+    if (PRIVATE_CURATED_SOURCE_IDS.has(id) && patch.participation_mode !== undefined && patch.participation_mode !== "isolated") {
+      throw new Conflict("This curation source is private. Editorial publication requires a separate approved release workflow.");
+    }
     if (new Date(before.updated_at as Date).toISOString() !== input.version) throw new Conflict("信源已被其他操作修改，请刷新后再改");
     const kindChanged = patch.kind !== undefined && patch.kind !== before.kind;
     if (patch.kind !== undefined && !patch.config) throw new UnsupportedConfig("调整采集方式须同时提供完整采集配置");
