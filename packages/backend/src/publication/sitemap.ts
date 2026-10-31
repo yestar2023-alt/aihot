@@ -10,7 +10,7 @@ import { latestHotRanking } from "./hot.ts";
 import { ITEM_FROM } from "./items.ts";
 import { sql } from "../db.ts";
 import { shared } from "../lib/cache.ts";
-import { publicCuration } from "../admin/curation-release.ts";
+import { publicCuration } from "./curation.ts";
 import { escapeXml } from "../lib/text.ts";
 import { siteUrl } from "./links.ts";
 import { evidenceCondition, listedCondition, selectedCondition, storyReportCondition } from "./scope.ts";
