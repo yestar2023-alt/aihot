@@ -19,6 +19,7 @@ import { createSource, fetchNow, listSources, previewSource, previewStoredSource
 import { sendProblem } from "../http/respond.ts";
 import { adminHandler } from "./admin-auth.ts";
 import { ingestItems } from "@aihot/backend/ingest/items";
+import { sql } from "@aihot/backend/db";
 import { parseXPostUrl } from "@aihot/backend/ingest/x-bookmark";
 
 // What every admin route reads its request with (the modules' admin routes too).
@@ -44,6 +45,12 @@ export function registerAdmin(app: FastifyInstance) {
     let post: ReturnType<typeof parseXPostUrl>;
     try { post = parseXPostUrl(raw); }
     catch (e) { return reply.code(400).send({ detail: e instanceof Error ? e.message : "Invalid X URL." }); }
+    // Fail closed if someone changed the private intake source into a public editorial feed.
+    const existing = await sql<{ participation_mode: string }[]>`
+      SELECT participation_mode FROM sources WHERE id = 'manual-x-bookmarks'`;
+    if (existing.some(row => row.participation_mode !== "isolated")) {
+      return reply.code(409).send({ detail: "Manual X source must remain isolated until editorial approval is implemented." });
+    }
     const stored = await ingestItems({
       sourceId: "manual-x-bookmarks",
       sourceName: "Manual X bookmarks",
