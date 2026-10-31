@@ -5,7 +5,7 @@ import { pageMeta } from "../lib/seo";
 import { edgeTtl } from "../lib/api.server";
 import type { Screen } from "../components/shell/screens";
 
-export const handle: Screen = { tab: "featured", name: "Playbook" };
+export const handle: Screen = { tab: "playbooks", name: "Playbook" };
 export const headers = () => edgeTtl(300);
 export async function loader({ params }: Route.LoaderArgs) {
   const p = playbookBySlug(params.slug ?? "");
