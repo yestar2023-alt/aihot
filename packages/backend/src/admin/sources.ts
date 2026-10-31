@@ -122,7 +122,7 @@ const SelectionClass = z.string().refine((c) => Object.hasOwn(SELECTION.classes,
 // Curated seed feeds and manual bookmarks must not be converted to auto-published news sources
 // until the public approval gate is independently tested on all public reading surfaces.
 const PRIVATE_CURATED_SOURCE_IDS = new Set([
-  "manual-x-bookmarks",
+  "manual-x-bookmarks", "manual-github-bookmarks", "manual-youtube-bookmarks",
   "rss-n8n-blog", "rss-buffer-resources", "rss-hubspot-marketing", "rss-make-blog",
 ]);
 
