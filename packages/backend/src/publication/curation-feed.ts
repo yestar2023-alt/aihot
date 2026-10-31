@@ -2,7 +2,7 @@
 import { SITE } from "@aihot/site";
 import { escapeXml } from "../lib/text.ts";
 import { siteUrl } from "./links.ts";
-import { publicCuration } from "../admin/curation-release.ts";
+import { publicCuration } from "./curation.ts";
 
 export async function signalRss(): Promise<string> {
   const { items } = await publicCuration(30);
