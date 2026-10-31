@@ -128,6 +128,7 @@ export type SourceCoverageState =
 
 export interface SourceCoverageEntry {
   id: string;
+  kind: string;
   name: string;
   lanes: string[];
   state: SourceCoverageState;
