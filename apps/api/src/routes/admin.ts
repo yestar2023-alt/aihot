@@ -21,6 +21,7 @@ import { adminHandler } from "./admin-auth.ts";
 import { ingestItems } from "@aihot/backend/ingest/items";
 import { sql } from "@aihot/backend/db";
 import { parseXPostUrl } from "@aihot/backend/ingest/x-bookmark";
+import { parseSourceBookmark } from "@aihot/backend/ingest/bookmarks";
 import { listCuration, updateCuration } from "@aihot/backend/admin/curation";
 import { releaseCuration, withdrawCuration } from "@aihot/backend/admin/curation-release";
 
@@ -40,6 +41,29 @@ function decodeImage(dataUrl: unknown): Buffer {
 }
 
 export function registerAdmin(app: FastifyInstance) {
+  // Unified, private metadata-only editorial bookmark intake.
+  app.post("/api/admin/bookmark", adminHandler(async (req, reply) => {
+    const raw = body<{ url?: unknown }>(req).url;
+    if (typeof raw !== "string" || raw.length > 2048) {
+      return reply.code(400).send({ detail: "Provide a valid supported HTTPS source URL." });
+    }
+    let item: ReturnType<typeof parseSourceBookmark>;
+    try { item = parseSourceBookmark(raw); }
+    catch (error) {
+      return reply.code(400).send({ detail: error instanceof Error ? error.message : "Invalid source URL." });
+    }
+    const existing = await sql<{ participation_mode: string }[]>`
+      SELECT participation_mode FROM sources WHERE id = ${item.sourceId}`;
+    if (existing.some(source => source.participation_mode !== "isolated")) {
+      return reply.code(409).send({ detail: "This source must remain isolated before editorial intake." });
+    }
+    const saved = await ingestItems({
+      sourceId: item.sourceId, sourceName: item.sourceName,
+      items: [{ title: item.title, url: item.canonicalUrl }],
+    });
+    return { created: saved.created, kind: item.kind, url: item.canonicalUrl, private: true };
+  }));
+
   // Private manual X bookmark intake: an authenticated admin action, not a publishing endpoint.
   app.post("/api/admin/bookmark-x", adminHandler(async (req, reply) => {
     const raw = body<{ url?: unknown }>(req).url;
