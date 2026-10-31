@@ -1,5 +1,5 @@
 {
-  "$comment": "English marketing content radar seeds; all sources are private isolated candidates. Added feeds were publicly documented as RSS/Atom endpoints but need live preview on this deployment. No automatic public website/newsletter release. T1 first-party; T2 independent media. initialBackfillLimit=3 for new feeds. Deleted JSON seeds are NOT automatically removed from an existing DB.",
+  "$comment": "PRIVATE candidate registry: 22 RSS/Atom seeds (needs feed previews) + 10 disabled paid X search seeds (requires SOCIALDATA_API_KEY and explicit budget approval before enabling). No auto-publication, no full-text syndication. New feeds must be individually verified and explicitly enabled under owner control; older stored source rows are not overwritten by seeding.",
   "sources": [
     {
       "id": "rss-n8n-blog",
@@ -426,6 +426,196 @@
       "interval_minutes": 360,
       "tags": [
         "CRM"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "x-auto-marketing",
+      "name": "X: marketing automation workflows",
+      "kind": "x_search",
+      "config": {
+        "query": "n8n marketing automation lang:en -filter:replies",
+        "searchType": "Latest"
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 240,
+      "tags": [
+        "Automation",
+        "Workflow"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "x-seo-automation",
+      "name": "X: AI SEO workflows",
+      "kind": "x_search",
+      "config": {
+        "query": "AI SEO workflow lang:en -filter:replies",
+        "searchType": "Latest"
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 240,
+      "tags": [
+        "SEO",
+        "AEO"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "x-social-automation",
+      "name": "X: AI social content operations",
+      "kind": "x_search",
+      "config": {
+        "query": "AI social media automation lang:en -filter:replies",
+        "searchType": "Latest"
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 240,
+      "tags": [
+        "Social Media",
+        "Content Repurposing"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "x-paid-media",
+      "name": "X: AI ads workflows",
+      "kind": "x_search",
+      "config": {
+        "query": "AI ads automation lang:en -filter:replies",
+        "searchType": "Latest"
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 240,
+      "tags": [
+        "Paid Ads",
+        "PPC"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "x-content-repurposing",
+      "name": "X: content repurposing",
+      "kind": "x_search",
+      "config": {
+        "query": "AI content repurposing lang:en -filter:replies",
+        "searchType": "Latest"
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 240,
+      "tags": [
+        "Content Repurposing",
+        "Content Planning"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "x-email-lifecycle",
+      "name": "X: email lifecycle AI",
+      "kind": "x_search",
+      "config": {
+        "query": "AI email marketing workflow lang:en -filter:replies",
+        "searchType": "Latest"
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 240,
+      "tags": [
+        "Email Marketing",
+        "Lifecycle"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "x-analytics-reporting",
+      "name": "X: marketing data reporting",
+      "kind": "x_search",
+      "config": {
+        "query": "AI marketing reporting lang:en -filter:replies",
+        "searchType": "Latest"
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 240,
+      "tags": [
+        "Reporting",
+        "Analytics"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "x-ecommerce-growth",
+      "name": "X: ecommerce automation",
+      "kind": "x_search",
+      "config": {
+        "query": "Shopify AI automation lang:en -filter:replies",
+        "searchType": "Latest"
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 240,
+      "tags": [
+        "Ecommerce",
+        "Growth"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "x-growth-experiments",
+      "name": "X: growth experiments",
+      "kind": "x_search",
+      "config": {
+        "query": "AI growth experiments lang:en -filter:replies",
+        "searchType": "Latest"
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 240,
+      "tags": [
+        "Marketing Experiments",
+        "Conversion Optimization"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "x-agent-marketing",
+      "name": "X: marketing agents",
+      "kind": "x_search",
+      "config": {
+        "query": "AI agent marketing workflow lang:en -filter:replies",
+        "searchType": "Latest"
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 240,
+      "tags": [
+        "AI Agents",
+        "Automation"
       ],
       "site_fulltext": false,
       "syndicate_fulltext": false
