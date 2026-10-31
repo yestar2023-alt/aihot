@@ -4,7 +4,7 @@ import { pageMeta } from "../lib/seo";
 import { edgeTtl } from "../lib/api.server";
 import type { Screen } from "../components/shell/screens";
 
-export const handle: Screen = { tab: "featured", name: "Playbooks" };
+export const handle: Screen = { tab: "playbooks", name: "Playbooks" };
 export const headers = () => edgeTtl(300);
 export function meta() {
   return pageMeta({
