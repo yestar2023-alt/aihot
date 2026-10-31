@@ -1,5 +1,5 @@
 {
-  "$comment": "Marketing candidate feeds (six starting sources); RSS/Atom parser compatibility and real collection must be verified by preview. The n8n YouTube channel ID is sourced from a public n8n channel listing. All sources remain isolated; additions do not delete any old sources already in a running PostgreSQL database. No fulltext republication.",
+  "$comment": "English marketing content radar seeds; all sources are private isolated candidates. Added feeds were publicly documented as RSS/Atom endpoints but need live preview on this deployment. No automatic public website/newsletter release. T1 first-party; T2 independent media. initialBackfillLimit=3 for new feeds. Deleted JSON seeds are NOT automatically removed from an existing DB.",
   "sources": [
     {
       "id": "rss-n8n-blog",
@@ -122,6 +122,310 @@
       "tags": [
         "Automation",
         "Video"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-google-search-central",
+      "name": "Google Search Central Blog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://developers.google.com/search/blog/feed.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "SEO"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-ahrefs-blog",
+      "name": "Ahrefs Blog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://ahrefs.com/blog/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "SEO"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-search-engine-land",
+      "name": "Search Engine Land",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://searchengineland.com/feed",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "SEO"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-social-media-examiner",
+      "name": "Social Media Examiner",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.socialmediaexaminer.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Social Media"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-later-blog",
+      "name": "Later Blog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://later.com/rss.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Social Media"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-google-ads-commerce",
+      "name": "Google Ads & Commerce Blog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://blog.google/products/ads-commerce/rss/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Growth"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-microsoft-advertising",
+      "name": "Microsoft Advertising Blog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://about.ads.microsoft.com/en-us/blog/rss",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Growth"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-meta-developers",
+      "name": "Meta Developer News",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://developers.facebook.com/blog/devblog/rss/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Social Media"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-omnisend-blog",
+      "name": "Omnisend Ecommerce Marketing",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.omnisend.com/blog/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Email Marketing"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-campaign-monitor",
+      "name": "Campaign Monitor Blog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.campaignmonitor.com/blog/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Email Marketing"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-amplitude-blog",
+      "name": "Amplitude Blog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://amplitude.com/feed",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Analytics"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-posthog-blog",
+      "name": "PostHog Blog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://posthog.com/rss.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Analytics"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-shopify-changelog",
+      "name": "Shopify Changelog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://changelog.shopify.com/feed.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Growth"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-practical-ecommerce",
+      "name": "Practical Ecommerce",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.practicalecommerce.com/feed",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Growth"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-lennys-newsletter",
+      "name": "Lenny's Newsletter",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.lennysnewsletter.com/feed",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Growth"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-hubspot-sales",
+      "name": "HubSpot Sales Blog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://blog.hubspot.com/sales/rss.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "CRM"
       ],
       "site_fulltext": false,
       "syndicate_fulltext": false
