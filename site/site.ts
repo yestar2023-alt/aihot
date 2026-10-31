@@ -31,13 +31,13 @@ export const SITE = {
   /** 主题目录页（/topics）的标题。 */
   topicsTitle: "Marketing Automation Topics | AI Marketer Signal",
   /** 反馈表单输入框里的示例。 */
-  feedbackExample: "例如：我在搜索某个关键词时遇到……我原本想……",
+  feedbackExample: "For example: the original source of a linked article appears incorrect...",
   /** 反馈页标题下面的一句话。 */
-  feedbackLead: "发现 bug、想要的功能、看不顺眼的地方，都可以告诉我们。",
+  feedbackLead: "Report an issue, suggest a relevant source, or request a correction.",
   /** 反馈表单邮箱框里的提示。 */
-  feedbackEmailHint: "留下邮箱，我们可以回信联系你",
+  feedbackEmailHint: "Email address (optional, for a reply)",
   /** 一句话介绍：搜索引擎、分享卡片、RSS、llms.txt 会用。 */
-  description: "Curated AI marketing workflows, practical playbooks, and trusted resources for content and growth marketers. Original sources linked; human-reviewed publishing is the goal.",
+  description: "Curated AI marketing workflows, practical playbooks, and trusted resources for content and growth marketers. Original sources linked; published only after editor review.",
   /** llms.txt 里一句话介绍下面的一段详细介绍（选填）。 */
   llmsIntro: null as string | null,
   /** 一行小字：分享图、海报下方。 */
@@ -47,7 +47,7 @@ export const SITE = {
   /** 网站开始收录的年份（结构化数据的时间范围，选填）。 */
   since: null as string | null,
   /** 界面语言（HTML lang、og:locale）。 */
-  locale: "zh-CN",
+  locale: "en-US",
   /** 默认域名，只在没设置 SITE_URL 时使用。 */
   defaultUrl: "http://localhost:3000",
   /** 标准图标（favicon.ico、icon.png、icon-192.png、apple-icon.png、logo.svg）以外也放在网站根目录的图标，site/brand/ 里的文件名（选填）；manifest.webmanifest 或外站引用了它们时用。 */
@@ -86,8 +86,8 @@ export const SITE = {
 export const POLICY = {
   terms: {
     /** 页面名：导航、页脚、页面标题都用它。 */
-    name: "使用规则",
-    description: "本站网页、RSS、公开 API 与 MCP 的使用规则。",
+    name: "Terms & Attribution",
+    description: "Usage, source attribution and editorial limitations.",
     /** llms.txt 里对这一页的一句说明（选填）。 */
     covers: null as string | null,
     /** Agent 接入页的 RSS、API 两栏各自提醒的使用规则（选填）。 */
@@ -104,7 +104,7 @@ export const POLICY = {
     headers: null as null | Record<string, string>,
   },
   privacy: {
-    description: "本站如何处理浏览器本地数据、反馈资料与访问日志。",
+    description: "Overview of browser, provider, newsletter and operational data practices.",
     /** llms.txt 里对这一页的一句说明（选填）。 */
     covers: null as string | null,
   },
