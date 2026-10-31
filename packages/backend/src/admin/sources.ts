@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { SOURCE_DEFAULTS } from "@aihot/site";
 import { SELECTION } from "@aihot/industry/selection";
+import { PRIVATE_MARKETING_SEED_IDS } from "@aihot/industry/source-coverage";
 import type { AdminSource, AdminSourceCreated, AdminSourceDetail, AdminSourcePreview, AdminSourceRow, AdminSources, BeforeJson } from "@aihot/contracts/admin";
 import { REPLACEABLE_SOURCE_KINDS } from "@aihot/contracts/admin";
 import { audit, auditHistory, Conflict } from "../audit.ts";
@@ -123,8 +124,7 @@ const SelectionClass = z.string().refine((c) => Object.hasOwn(SELECTION.classes,
 // until the public approval gate is independently tested on all public reading surfaces.
 const PRIVATE_CURATED_SOURCE_IDS = new Set([
   "manual-x-bookmarks", "manual-github-bookmarks", "manual-youtube-bookmarks",
-  "rss-n8n-github-releases", "rss-n8n-youtube",
-  "rss-n8n-blog", "rss-buffer-resources", "rss-hubspot-marketing", "rss-make-blog",
+  ...PRIVATE_MARKETING_SEED_IDS,
 ]);
 
 const EDITABLE = z
@@ -166,6 +166,9 @@ async function saveSource(id: string, patch: z.infer<typeof EDITABLE>, input: { 
     if (patch.config) await tx`SELECT pg_advisory_xact_lock(hashtext('admin-source-identity'))`;
     const [before] = await tx`SELECT * FROM sources WHERE id = ${id} FOR UPDATE`;
     if (!before) return null;
+    if (PRIVATE_CURATED_SOURCE_IDS.has(id) && ((patch.site_fulltext === true) || (patch.syndicate_fulltext === true))) {
+      throw new Conflict("Curated source full-text redistribution is prohibited without an explicit rights review.");
+    }
     if (PRIVATE_CURATED_SOURCE_IDS.has(id) && patch.participation_mode !== undefined && patch.participation_mode !== "isolated") {
       throw new Conflict("This curation source is private. Editorial publication requires a separate approved release workflow.");
     }
@@ -284,6 +287,10 @@ export async function findDuplicateSource(kind: string, config: Record<string, u
 
 export async function createSource(input: unknown, actor: string): Promise<BeforeJson<AdminSourceCreated>> {
   const s = CreateSchema.parse(input);
+  if (PRIVATE_CURATED_SOURCE_IDS.has(s.id) &&
+    (s.participation_mode !== "isolated" || s.site_fulltext || s.syndicate_fulltext)) {
+    throw new Conflict("Reserved curated sources must remain isolated and cannot redistribute full text.");
+  }
   s.first_party = s.tier === "T1";
   assertSupportedConfig(s.kind, s.config);
   const result = await sql.begin(async (tx) => {
