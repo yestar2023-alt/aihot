@@ -88,7 +88,7 @@ export default function SourceCoveragePage({ loaderData }: Route.ComponentProps)
     actions={<Link to="/admin/sources" className="rounded-control px-3 py-2 text-[13px] font-semibold text-accent ring-1 ring-line">All source settings →</Link>}
   >
     <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
-      <Stat label="Expected feeds" value={expected} />
+      <Stat label="Seeded source candidates" value={expected} />
       <Stat label="Imported to DB" value={imported} />
       <Stat label="Recently healthy" value={observedOk} tone={observedOk ? "ok" : undefined} />
       <Stat label="Missing / unverified" value={untested} tone={untested ? "warn" : undefined} />
