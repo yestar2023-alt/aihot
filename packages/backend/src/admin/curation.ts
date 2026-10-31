@@ -14,6 +14,7 @@ export interface CurationRow {
   discovered_at: Date;
   published_at: Date | null;
   status: CurationState;
+  release_status: "published" | "withdrawn" | null;
   note: string;
   evidence_url: string | null;
   version: number;
@@ -56,10 +57,11 @@ export async function listCuration(status?: string): Promise<{ rows: CurationRow
   const [rows, counts] = await Promise.all([
     sql<CurationRow[]>`
       SELECT a.id AS article_id, a.title, a.url, s.name AS source_name, a.discovered_at, a.published_at,
-             coalesce(r.status, 'inbox') AS status, coalesce(r.note, '') AS note, r.evidence_url,
+             coalesce(r.status, 'inbox') AS status, rel.status AS release_status, coalesce(r.note, '') AS note, r.evidence_url,
              coalesce(r.version, 0) AS version, r.updated_by, r.updated_at
       FROM articles a JOIN sources s ON s.id = a.source_id
       LEFT JOIN curation_reviews r ON r.article_id = a.id
+      LEFT JOIN curation_releases rel ON rel.article_id = a.id
       WHERE s.participation_mode = 'isolated'
         AND (${selected}::text IS NULL OR coalesce(r.status, 'inbox') = ${selected})
       ORDER BY a.discovered_at DESC, a.id DESC LIMIT 50`,
