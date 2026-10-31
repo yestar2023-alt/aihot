@@ -121,6 +121,44 @@ export interface AdminSourceUpdate {
   reason?: string;
 }
 
+/** Health describes recorded collection runs, not independently validated feed content. */
+export type SourceCoverageState =
+  | "not_imported" | "paused" | "failing" | "never_successful" | "not_tested"
+  | "degraded" | "stale" | "overdue" | "observed_ok";
+
+export interface SourceCoverageEntry {
+  id: string;
+  name: string;
+  lanes: string[];
+  state: SourceCoverageState;
+  health: string | null;
+  enabled: boolean;
+  isolated: boolean | null;
+  items7d: number;
+  lastOkAt: Timestamp | null;
+  lastFetchAt: Timestamp | null;
+  lastRunAt: Timestamp | null;
+  lastRunStatus: string | null;
+  lastFound: number | null;
+  lastNew: number | null;
+  lastError: string | null;
+}
+
+export interface AdminSourceCoverage {
+  checkedAt: Timestamp;
+  expected: number;
+  imported: number;
+  observedOk: number;
+  untested: number;
+  unsafeModes: number;
+  lanes: Array<{
+    id: string; title: string; description: string;
+    expected: number; imported: number; observedOk: number;
+    needingAttention: number; items7d: number;
+  }>;
+  entries: SourceCoverageEntry[];
+}
+
 export interface AdminSourceRow {
   id: string;
   name: string;
