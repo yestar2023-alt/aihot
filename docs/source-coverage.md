@@ -45,7 +45,17 @@ For an important item, triangulate at least two independent evidence types (e.g.
 | Reddit / independent communities | Watchlist only | Link and discuss source context manually; do not scrape behind restrictions |
 | Paid marketing intelligence | Not integrated | Do not claim ad spending, reach or ROI; no silent subscriptions |
 
-### Operational plan
+### Source Radar admin implementation
+
+- Admin navigation: **Source Radar** (`/admin/source-coverage`); authenticated endpoint `GET /api/admin/source-coverage`.
+- Uses the one-to-many canonical lane mapping `industry/source-coverage.ts`, covering exactly the 22 IDs in `industry/sources.json`. New seeds must be added to both files or registry tests fail.
+- Source statuses: `not_imported` (seed not in DB), `not_tested` (no recorded fetch), `never_successful`, `failing`, `degraded`, `stale`, `overdue`, `paused`, and `observed_ok` (recent successful collection). A successful fetch is **not** source credibility or copyright clearance.
+- Each card shows recent fetch time/status, found/new counts, errors, items collected over seven days and linked marketing lanes. The dashboard does not make external calls during initial load.
+- A human can click **Preview live feed** on one imported source. It uses the project's existing authenticated preview endpoint and does **not** store candidates, trigger an LLM, or grant publication permission. A preview success is transient, not recorded as a durable fetch unless the normal collector subsequently runs.
+- `packages/backend/src/admin/sources.ts` derives its protected source IDs from this same registry, so all 22 seeds cannot be flipped to public editorial participation or full-text redistribution through routine admin edits. The manual X, GitHub and YouTube buckets are likewise protected.
+- The default admin **Source** creation form still needs operators to provide the actual feed URL and credentials. A seed missing from an already-running database does not magically appear by changing this JSON; explicitly import approved candidates through the project's supported source creation workflow.
+
+## Operational plan
 
 1. **Preview every feed** as an isolated source via admin's feed preview. Require HTTP success, parseable RSS/Atom, canonical links, a sensible date, the expected author, and no mass duplicates. Record `checked_at`, HTTP code, parsed item count, last item time and error in operator notes or an admin health table. An aggregator reporting a feed as active does **not** prove this deployment can fetch it.
 2. **Enable selectively:** Begin with 2 source families from each of the highest-impact lanes, then expand gradually. Cost and rate-limit ceilings should apply to *discovery*, not only LLM prompts.
