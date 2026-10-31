@@ -22,6 +22,7 @@ const SECTIONS: Array<{ title: string; items: NavItem[] }> = [
     title: "内容",
     items: [
       { to: "/", label: "精选", icon: IconBolt, end: true },
+      { to: "/signals", label: "AI Signals", icon: IconDoc },
       { to: "/all", label: subjectAfter("全部", "动态"), icon: IconList },
       { to: "/hot", label: "热点榜", icon: IconFlame },
       { to: "/daily", label: withSubject("日报"), icon: IconDoc },
