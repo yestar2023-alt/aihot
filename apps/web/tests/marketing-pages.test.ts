@@ -13,15 +13,17 @@ before(async () => {
 });
 after(async () => { await browser?.close(); await web?.stop(); });
 
-test("marketing homepage links to original-source content, guides and digest", async () => {
+test("maker homepage links to Build Grow Automate guides and digest", async () => {
   const page = await browser.newPage();
   try {
     await visit(page, web.origin + "/");
-    await expect(page.getByRole("heading", { name: /Less AI noise/ })).toBeVisible();
-    await expect(page.getByRole("heading", { name: /Playbooks for real marketing tasks/ })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Build. Grow./ })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Guides for real work/ })).toBeVisible();
     await expect(page.getByText("The first Signals are in editorial review.")).toBeVisible();
     await page.getByRole("link", { name: "Explore Playbooks" }).click();
-    await expect(page.getByRole("heading", { name: /AI marketing work you can actually plan/ })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Build. Grow. Automate./ })).toBeVisible();
+    await page.getByRole("link", { name: /Build \(1\)/ }).click();
+    await expect(page.getByRole("heading", { name: /Ship a small AI-assisted website/ })).toBeVisible();
   } finally { await page.close(); }
 });
 
@@ -33,7 +35,7 @@ test("playbook articles expose original references and explicitly disclaim testi
     await expect(page.getByText(/not independently tested/i).first()).toBeVisible();
     await expect(page.getByRole("link", { name: /Google Analytics Data API: runReport/ })).toHaveAttribute("href", /^https:\/\/developers\.google\.com/);
     const title = await page.title();
-    assert.match(title, /AI Marketer Signal/);
+    assert.match(title, /AI Workflow Fieldbook/);
     await visit(page, web.origin + "/playbooks/not-a-real-guide");
     assert.equal((await page.locator("body").innerText()).includes("weekly GA4 report"), false);
   } finally { await page.close(); }
@@ -43,7 +45,7 @@ test("newsletter cannot collect emails before a provider is configured", async (
   const page = await browser.newPage();
   try {
     await visit(page, web.origin + "/newsletter");
-    await expect(page.getByRole("heading", { name: /One useful AI marketing email/ })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Useful AI workflows/ })).toBeVisible();
     await expect(page.getByText(/subscription provider has not been connected/i)).toBeVisible();
     assert.equal(await page.getByRole("textbox", { name: /Email address/ }).count(), 0);
   } finally { await page.close(); }
