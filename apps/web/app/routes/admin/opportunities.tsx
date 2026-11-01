@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router";
+import { Link, useNavigate } from "react-router";
 import type { Route } from "./+types/opportunities";
 import type { AdminOpportunityBoard, AdminEditorialOpportunity } from "@aihot/contracts/admin";
 import { SITE } from "@aihot/site";
@@ -66,7 +66,6 @@ function Opportunity({ lead }: { lead: AdminEditorialOpportunity }) {
   </article>;
 }
 export default function OpportunityRadar({ loaderData }: Route.ComponentProps) {
-  const [params]=useSearchParams();
   const navigate=useNavigate();
   const [lane,setLane]=useState("all");
   const [onlyActionable,setOnlyActionable]=useState(false);
