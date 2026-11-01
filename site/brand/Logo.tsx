@@ -12,8 +12,8 @@ export function Wordmark({ size = 24, className = "", title = SITE.name }: { siz
         <path d="m35 8 7 1-3 6" fill="none" stroke="#56DFD4" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
       <span className="flex min-w-0 flex-col leading-[1.15] tracking-tight">
-        <span className="whitespace-nowrap text-[12px] font-bold uppercase text-ink">AI Marketer</span>
-        <span className="whitespace-nowrap text-[16px] font-black text-accent">Signal</span>
+        <span className="whitespace-nowrap text-[12px] font-bold uppercase text-ink">AI Workflow</span>
+        <span className="whitespace-nowrap text-[16px] font-black text-accent">Fieldbook</span>
       </span>
     </span>
   );
