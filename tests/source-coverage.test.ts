@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
-import { MARKETING_LANES, MARKETING_SOURCE_LANES, PRIVATE_MARKETING_SEED_IDS } from "@aihot/industry/source-coverage";
+import { MARKETING_LANES, MARKETING_SOURCE_LANES, PRIVATE_MARKETING_SEED_IDS, WORK_TRACKS } from "@aihot/industry/source-coverage";
 import { candidateState } from "@aihot/backend/admin/source-coverage";
 
 const config: { sources: Array<{
@@ -23,8 +23,8 @@ const baseline = {
 
 test("every configured marketing seed belongs to exactly one protected registry entry", () => {
   const configIds = config.sources.map(source => source.id);
-  assert.equal(configIds.length, 32);
-  assert.equal(config.sources.filter(s => s.kind === "rss").length, 22);
+  assert.equal(configIds.length, 34);
+  assert.equal(config.sources.filter(s => s.kind === "rss").length, 24);
   assert.equal(config.sources.filter(s => s.kind === "x_search").length, 10);
   assert.equal(new Set(configIds).size, configIds.length);
   assert.deepEqual([...configIds].sort(), [...PRIVATE_MARKETING_SEED_IDS].sort());
@@ -34,7 +34,9 @@ test("every configured marketing seed belongs to exactly one protected registry 
     assert.ok(groups.length >= 1, `${id} has no coverage`);
     assert.ok(groups.every(l => lanes.has(l)), `${id} has an unknown category`);
   }
-  assert.equal(MARKETING_LANES.length, 10);
+  assert.equal(MARKETING_LANES.length, 11);
+  assert.deepEqual([...WORK_TRACKS], ["Build", "Grow", "Automate"]);
+  for (const track of WORK_TRACKS) assert.ok(MARKETING_LANES.some(l => l.track === track));
   for (const lane of MARKETING_LANES) assert.ok(Object.values(MARKETING_SOURCE_LANES).some(x => (x as readonly string[]).includes(lane.id)));
 });
 
