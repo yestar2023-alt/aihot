@@ -18,8 +18,8 @@ export async function loader({ request }: Route.LoaderArgs) {
 export function meta({ loaderData }: Route.MetaArgs) {
   const hasItems = (loaderData?.feed.items.length ?? 0) > 0;
   return pageMeta({
-    title: "AI Signals for Marketers",
-    description: "Human-selected AI marketing workflows, useful experiments, and credible resources. Our commentary links back to every original creator.",
+    title: "Curated AI Workflows & Signals for Makers",
+    description: "Human-selected AI workflows for building products, growing an audience and automating small-team operations. Every Signal links to the original creator.",
     path: "/signals", noindex: !hasItems,
   });
 }
@@ -31,7 +31,7 @@ export default function SignalsPage() {
         <div className="mb-2 text-[11px] font-semibold uppercase tracking-[0.19em] text-accent">AI Marketer Signal</div>
         <h1 className="text-[31px] font-bold tracking-tight text-ink sm:text-[42px]">Signals, not noise.</h1>
         <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-ink-3">
-          Useful AI marketing workflows, practical experiments, and resources worth opening.
+          Useful ideas and workflows for Build, Grow and Automate.
           Every entry is individually reviewed, explicitly released, and links to its original source.
         </p>
         <a className="mt-4 inline-flex text-[13px] font-medium text-accent hover:underline" href="/feed/signals.xml">
