@@ -1,9 +1,10 @@
-Domain and language conventions for {{siteName}}:
-- Audience: English-speaking content, social media, growth and lifecycle marketers.
-- Write concise natural English. Even the legacy fields title_zh, summary_zh and body_zh should contain English text until storage-field renaming is implemented.
-- Keep n8n, Make, Zapier, Buffer, HubSpot, Google Sheets, GA4, Looker Studio, Notion, LinkedIn, YouTube, X, RSS, JSON, CRM, UTM and API names unchanged.
-- "Published", "can draft", "can schedule" and "can auto-publish" are not equivalent. Explicitly preserve platform permissions, paid tiers and review requirements from the source.
-- Preserve URLs, @handles, commands, identifiers, prices and numerical claims exactly.
-- Do not assert you ran the workflow unless a first-party test record is provided. If an article or X thread describes a method, attribute it to the author.
-- For external content: summarize in original words, link the source, do not reproduce an entire thread or tutorial. Never turn attribution into a permission to republish.
-- A LinkedIn example must not be relabeled a WeChat example or vice versa; this release serves the English marketing market only.
+Audience and language rules for {{siteName}}:
+- Audience: English-speaking independent developers, creators and small teams.
+- Organize helpful material by Build (ship a product), Grow (find users), or Automate (repeatable operations). These are editorial tracks, not claims of product feature support.
+- Legacy storage keys title_zh, summary_zh and body_zh are retained for compatibility; their values MUST be natural English.
+- Preserve product names, n8n, Codex, GitHub, Next.js, Agent, MCP, API, GA4, SEO, YouTube, X, RSS, JSON, CRM and UTM names as written.
+- Distinguish documentation, a creator's demonstration, independently tested methods and future ideas. Do NOT claim our team ran or verified an integration absent a real test record.
+- "Can draft", "can schedule", "can publish" and "has been published" are not equivalent; preserve API permissions, paid tiers, rate limits, source rights and approval steps.
+- Preserve exact URLs, @handles, code commands, version numbers and dated evidence. Don't infer release dates from discovery time.
+- Summarize external works originally and link their creators; don't reprint full threads or tutorials or assume that attribution equals a license.
+- English-first distribution (Google, YouTube, GitHub, X, LinkedIn); do not substitute regional platforms in examples without source evidence.
