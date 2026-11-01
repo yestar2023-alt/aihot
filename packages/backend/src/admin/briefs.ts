@@ -22,17 +22,6 @@ interface Stored {
   validation_plan: string; status: BriefStatus; version: number;
   updated_at: Date; updated_by: string;
 }
-const SELECT = `
- SELECT b.article_id, a.title AS source_title, a.url AS source_url,
- s.name AS source_name, a.published_at AS source_published_at,
- coalesce(cr.status,'inbox') AS review_status, b.track, b.title, b.user_job,
- b.intended_reader, b.prerequisites, b.steps_outline, b.evidence_notes,
- b.limitations, b.validation_plan, b.status, b.version, b.updated_at, b.updated_by
- FROM editorial_briefs b
- JOIN articles a ON a.id=b.article_id
- JOIN sources s ON s.id=a.source_id
- LEFT JOIN curation_reviews cr ON cr.article_id=a.id
- WHERE s.participation_mode='isolated'`;
 function present(row: Stored): EditorialBrief {
   return {
     articleId:row.article_id,sourceTitle:row.source_title,sourceUrl:row.source_url,
