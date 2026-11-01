@@ -48,6 +48,15 @@ AI Marketer Signal is an **English-first, task-led editorial publication for mar
 
 Official integration guide: https://docs.buttondown.com/building-your-subscriber-base
 
+## New: private Opportunity Radar (editorial triage)
+
+- `/admin/opportunities` plus `GET /api/admin/opportunities?days=7|30` reads recent stored **isolated** marketing source metadata (up to 500 rows and 100 displayed groups); no external calls, LLM, web searches, or third-party content copying.
+- The deterministic ranking combines title evidence of a specific task, first-party provenance, discovery recency and **potential** related coverage. A similar headline is never independent corroboration.
+- Reviewers can inspect original source links, filter by marketing domain and shortlist a candidate using the existing authenticated versioned review API. The action does not fact-check, approve, release, or email.
+- An empty queue is an honest empty state; no views, reach, keyword volume, trend score or traffic projections are invented.
+- Tests cover grouping, date windows, rejected items, attribution and empty queues. The ranking means **editorial review priority**, not an SEO opportunity score.
+- Source Radar has 22 candidate RSS/Atom feeds and 10 disabled paid-X search presets. Operators must verify latest CI and preview real feeds before enabling scheduled collection.
+
 ## Open release blockers — cannot be truthfully claimed completed without operator inputs
 
 | Blocker | What remains |
