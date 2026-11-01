@@ -1,5 +1,5 @@
 {
-  "$comment": "PRIVATE candidate registry: 22 RSS/Atom seeds (needs feed previews) + 10 disabled paid X search seeds (requires SOCIALDATA_API_KEY and explicit budget approval before enabling). No auto-publication, no full-text syndication. New feeds must be individually verified and explicitly enabled under owner control; older stored source rows are not overwritten by seeding.",
+  "$comment": "Private candidate registry for independent makers and lean teams. Includes original marketing feeds, 2 additional disabled Build-domain GitHub Atom candidates and disabled paid X keyword presets. No automatic public release or full-text redistribution. Configured feeds are NOT verified as working until separately previewed; paid APIs require explicit operator approval.",
   "sources": [
     {
       "id": "rss-n8n-blog",
@@ -603,10 +603,10 @@
     },
     {
       "id": "x-agent-marketing",
-      "name": "X: marketing agents",
+      "name": "X: AI coding and builder agent workflows (disabled)",
       "kind": "x_search",
       "config": {
-        "query": "AI agent marketing workflow lang:en -filter:replies",
+        "query": "AI coding agent workflow lang:en -filter:replies",
         "searchType": "Latest"
       },
       "tier": "T2",
@@ -614,8 +614,50 @@
       "enabled": false,
       "interval_minutes": 240,
       "tags": [
-        "AI Agents",
-        "Automation"
+        "AI Coding",
+        "AI Agent Development"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-nextjs-releases",
+      "name": "Next.js GitHub Releases (candidate)",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://github.com/vercel/next.js/releases.atom",
+        "_aihot": {
+          "initialBackfillLimit": 2
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 360,
+      "tags": [
+        "Web Development",
+        "Deployment"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-openai-agents-releases",
+      "name": "OpenAI Agents Python Releases (candidate)",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://github.com/openai/openai-agents-python/releases.atom",
+        "_aihot": {
+          "initialBackfillLimit": 2
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 360,
+      "tags": [
+        "AI Agent Development",
+        "Developer Tooling"
       ],
       "site_fulltext": false,
       "syndicate_fulltext": false
