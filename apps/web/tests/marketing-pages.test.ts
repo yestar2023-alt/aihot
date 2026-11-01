@@ -41,6 +41,23 @@ test("playbook articles expose original references and explicitly disclaim testi
   } finally { await page.close(); }
 });
 
+test("Build, Grow and Automate have dedicated landing pages and preserve evidence caveats", async () => {
+  const page = await browser.newPage();
+  try {
+    for (const track of ["build", "grow", "automate"]) {
+      await visit(page, web.origin + "/workflows/" + track);
+      await expect(page.getByRole("navigation", { name: "Workflow categories" })).toBeVisible();
+      await expect(page.getByRole("heading", { name: "Start with a practical guide" })).toBeVisible();
+      await expect(page.getByText(/Documentation-based starters, not claimed hands-on test results/)).toBeVisible();
+      await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", web.origin + "/workflows/" + track);
+      await expect(page.getByRole("link", { name: "Read guide" }).first()).toBeVisible();
+    }
+    await visit(page, web.origin + "/workflows/unexpected");
+    await expect(page.getByText(/Workflow category not found|404|not found/i).first()).toBeVisible();
+  } finally { await page.close(); }
+});
+
 test("newsletter cannot collect emails before a provider is configured", async () => {
   const page = await browser.newPage();
   try {
