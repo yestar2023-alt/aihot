@@ -4,7 +4,7 @@
  * A playbook becomes public only when deliberately added to this repository via code review.
  */
 export interface Playbook {
-  slug: string; category: "Content Repurposing" | "Marketing Reporting" | "Content Planning";
+  slug: string; track: "Build" | "Grow" | "Automate"; category: "Content Repurposing" | "Marketing Reporting" | "Content Planning" | "Product Development" | "SEO Research";
   title: string; description: string; outcome: string; readingMinutes: number;
   lastReviewed: string; verification: "Documented approach — not independently tested";
   audience: string; prerequisites: string[];
@@ -13,9 +13,15 @@ export interface Playbook {
   sourceDocs: { title: string; url: string }[];
 }
 
+export const PLAYBOOK_TRACKS = [
+  { key: "Build", title: "Build", description: "Ship AI-powered products, sites and small agents with reliable review." },
+  { key: "Grow", title: "Grow", description: "Find search demand, earn distribution and repurpose owned content." },
+  { key: "Automate", title: "Automate", description: "Connect tools, data and repeatable operations with human checkpoints." },
+] as const;
+
 export const PLAYBOOKS: Playbook[] = [
   {
-    slug: "repurpose-webinar-into-social-content", category: "Content Repurposing",
+    slug: "repurpose-webinar-into-social-content", track: "Grow", category: "Content Repurposing",
     title: "Turn one webinar into a week of reviewed social drafts",
     description: "A practical, human-approved pipeline for turning your own webinar transcript into channel-specific posts without auto-publishing unverified claims.",
     outcome: "One source-of-truth transcript, a shortlist of usable claims, and several editable social drafts awaiting human approval.",
@@ -51,7 +57,7 @@ export const PLAYBOOKS: Playbook[] = [
     ],
   },
   {
-    slug: "weekly-ga4-report-with-human-review", category: "Marketing Reporting",
+    slug: "weekly-ga4-report-with-human-review", track: "Automate", category: "Marketing Reporting",
     title: "Plan an automated weekly GA4 report with an approval step",
     description: "A source-led workflow design for collecting GA4 metrics, appending them to a reporting sheet, and drafting a narrative that a marketer verifies before distribution.",
     outcome: "A consistent weekly metrics table and a reviewable summary with data provenance, not an unsupervised report blasted to clients.",
@@ -88,7 +94,7 @@ export const PLAYBOOKS: Playbook[] = [
     ],
   },
   {
-    slug: "rss-to-editorial-idea-queue", category: "Content Planning",
+    slug: "rss-to-editorial-idea-queue", track: "Automate", category: "Content Planning",
     title: "Build an RSS-to-editorial-ideas queue without autopublishing",
     description: "Collect credible marketing sources into a private backlog, deduplicate links and add an editorial decision before drafting anything public.",
     outcome: "A reusable content research queue with original sources, why-it-matters notes, and accountable go/no-go decisions.",
@@ -124,6 +130,82 @@ export const PLAYBOOKS: Playbook[] = [
     ],
   },
 ];
+
+// A source-led Build guide; no claim of hands-on execution or guaranteed deployment.
+PLAYBOOKS.unshift({
+  slug: "ship-ai-assisted-site-with-review", track: "Build", category: "Product Development",
+  title: "Ship a small AI-assisted website with a human review gate",
+  description: "Use an AI coding assistant to scaffold an MVP, then verify every changed file, run checks and ship a reversible preview before production.",
+  outcome: "A minimal working website with an explicit acceptance checklist, evidence from local checks, and a preview deployment to review.",
+  readingMinutes: 9, lastReviewed: "2026-11-01", verification: "Documented approach — not independently tested",
+  audience: "Indie makers and solo founders building a small product without a full engineering team.",
+  prerequisites: [
+    "A development machine with Node.js, Git and an IDE; a separate test repository or branch.",
+    "A clearly written one-screen product goal and a list of features to leave out of the MVP.",
+    "An AI coding tool of your choice, plus a way to review diffs and execute tests locally.",
+  ],
+  steps: [
+    { title: "Specify the outcome", detail: "Write a short brief naming one target user, their job, the input/output of the product, the main error states, and an acceptance criterion you can test without a language model." },
+    { title: "Create an isolated working branch", detail: "Initialize a new repository or create a branch in an existing project. Keep credentials in environment variables and a local .env ignored by Git. Do not give the coding assistant production credentials." },
+    { title: "Scaffold one user journey", detail: "Follow the official framework quickstart to create the app, then ask the assistant for one page and one end-to-end flow. Avoid building payments, login, or analytics unless essential to this single test." },
+    { title: "Inspect the resulting changes", detail: "Review changed files, dependency additions and external network calls. Reject hard-coded secrets, placeholder API outputs presented as production data, and blanket error suppression." },
+    { title: "Verify locally", detail: "Run the framework lint/typecheck/build commands and manually test a valid input, invalid input and a network failure. Record exact commands and results rather than asserting the assistant ran them." },
+    { title: "Deploy a preview and review it", detail: "Use the host's preview deployment or a staging environment; verify real responsive layout, navigation, canonical URL behavior and safe handling of missing environment variables." },
+    { title: "Approve production only after a checklist", detail: "Confirm content rights, privacy/cookie behavior, source URLs, rollback capability and deployment controls. Keep the release a separate explicit action." },
+  ],
+  checkpoints: [
+    "The MVP solves one named task; all main buttons work in the preview.",
+    "A local build and at least one error-path test actually completed and were recorded.",
+    "No API key or secret is exposed in the repository, browser bundle or screenshots.",
+    "Preview and production environments have separate access rules and a known rollback path.",
+  ],
+  pitfalls: [
+    { issue: "AI generates plausible but broken integrations", response: "Compare calls with primary API docs, use a mock for development and verify the live interface only with authorized credentials." },
+    { issue: "The first request expands into a large product", response: "Limit scope to one core workflow, then record later ideas separately from MVP acceptance criteria." },
+    { issue: "A successful build is mistaken for a successful release", response: "Test navigation, data and failure states in a deployed preview before authorizing production." },
+  ],
+  sourceDocs: [
+    { title: "Next.js App Router: Getting Started", url: "https://nextjs.org/docs/app/getting-started" },
+    { title: "GitHub Actions: Workflow syntax", url: "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax" },
+  ],
+});
+
+PLAYBOOKS.push({
+  slug: "find-first-seo-pages-for-new-site", track: "Grow", category: "SEO Research",
+  title: "Choose the first three SEO pages for a new product site",
+  description: "A research and prioritization workflow that connects real user questions, SERP intent, original product evidence and manageable production scope.",
+  outcome: "Three evidence-backed page briefs with a target query, user job, source checklist and measurable post-publication checks.",
+  readingMinutes: 8, lastReviewed: "2026-11-01", verification: "Documented approach — not independently tested",
+  audience: "Small teams and independent developers publishing English product or tutorial sites.",
+  prerequisites: [
+    "A working product or defined audience job, and access to real examples or product screenshots.",
+    "A browser for checking current search results, plus a simple spreadsheet to record intent and evidence.",
+    "A plan for collecting first-party performance after publishing, such as Google Search Console.",
+  ],
+  steps: [
+    { title: "List user jobs, not just keyword strings", detail: "Record the problems users have before, during and after using the product. Generate candidate query phrases from the language users actually use in support, reviews or community questions." },
+    { title: "Inspect the live SERP", detail: "Search each candidate phrase in the intended market and note what Google currently surfaces: tools, forums, official docs, examples or tutorials. Save the date of the check; do not fabricate rankings or search volume." },
+    { title: "Find the evidence gap", detail: "For each query, ask which essential answer the existing pages fail to provide. Prefer opportunities where your own product, screenshots or a properly sourced workflow can add something original." },
+    { title: "Choose a page type", detail: "Pick a solution landing page, hands-on tutorial or troubleshooting guide depending on intent. A keyword alone does not dictate whether to build a standalone tool." },
+    { title: "Write a one-page brief", detail: "Capture title, reader problem, acceptance question, required original sources, example output, limitations, internal links and a verification checklist." },
+    { title: "Publish and measure", detail: "Inspect mobile usability and indexing rules, then track impressions, queries and clicks over time. Use observed data to iterate; avoid promising a ranking or a specific traffic result." },
+  ],
+  checkpoints: [
+    "Each chosen query corresponds to one clear user task.",
+    "Current SERP intent and inspected date are recorded, not inferred from an AI summary.",
+    "At least one original example, screenshot or first-party insight will make each page useful.",
+    "Post-publication measurements and a revisit date are assigned.",
+  ],
+  pitfalls: [
+    { issue: "Keyword volume claims are unverified", response: "Label estimates as estimates or omit them. Treat Search Console as property-specific observed data after publication." },
+    { issue: "The page repeats ten existing summaries", response: "Add original workflow steps, a tested example, first-party data or a demonstrably clearer answer." },
+    { issue: "A trend is mistaken for sustained demand", response: "Document the time window, compare related queries and keep a maintenance plan before investing in a standalone domain." },
+  ],
+  sourceDocs: [
+    { title: "Google Search Central: SEO Starter Guide", url: "https://developers.google.com/search/docs/fundamentals/seo-starter-guide" },
+    { title: "Google Search Console: Performance report", url: "https://support.google.com/webmasters/answer/7576553" },
+  ],
+});
 
 export function playbookBySlug(slug: string): Playbook | undefined {
   return PLAYBOOKS.find(p => p.slug === slug);
