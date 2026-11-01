@@ -145,6 +145,40 @@ export interface SourceCoverageEntry {
   lastError: string | null;
 }
 
+/** A private editorial suggestion from source metadata; not an AI-verified claim. */
+export interface AdminOpportunitySource {
+  id: string;
+  title: string;
+  url: string;
+  sourceId: string;
+  sourceName: string;
+  publishedAt: string | null;
+  discoveredAt: string;
+  reviewStatus: "inbox" | "shortlisted" | "fact_checked" | "approved" | "rejected";
+  reviewVersion: number;
+}
+export interface AdminEditorialOpportunity {
+  key: string;
+  title: string;
+  lanes: string[];
+  reviewPriority: number;
+  priorityReasons: string[];
+  relatedCount: number;
+  distinctDomains: number;
+  sources: AdminOpportunitySource[];
+  reviewStatus: "inbox" | "shortlisted" | "fact_checked" | "approved" | "rejected";
+  latestDiscoveredAt: string;
+  confidence: "unverified_source_metadata";
+}
+export interface AdminOpportunityBoard {
+  generatedAt: string;
+  lookbackDays: number;
+  totalCandidates: number;
+  displayed: number;
+  leads: AdminEditorialOpportunity[];
+  methodology: string;
+}
+
 export interface AdminSourceCoverage {
   checkedAt: Timestamp;
   expected: number;
