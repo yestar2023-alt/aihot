@@ -102,7 +102,7 @@ export default function EditorialInbox({ loaderData }: Route.ComponentProps) {
   const [chosen, setChosen] = useState<string | null>(null);
   const selected = rows.find(r => r.article_id === chosen);
   return (
-    <AdminPage title="Editorial Inbox" subtitle="Review imported X links and candidate marketing resources. This is a private newsroom; nothing here is auto-published.">
+    <AdminPage title="Editorial Inbox" subtitle="Review Build, Grow and Automate sources, then create private Playbook briefs or explicitly release reviewed Signals. This is a private newsroom; nothing here is auto-published.">
       <div className="space-y-4">
         <div className="flex flex-wrap gap-2">
           {TABS.map(tab => (
