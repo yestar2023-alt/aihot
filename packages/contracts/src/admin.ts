@@ -146,6 +146,32 @@ export interface SourceCoverageEntry {
 }
 
 /** A private editorial suggestion from source metadata; not an AI-verified claim. */
+/** Private Playbook outline. Never present in public site or RSS responses. */
+export type EditorialBriefStatus = "draft" | "ready_for_review";
+export type EditorialBriefTrack = "Build" | "Grow" | "Automate";
+export interface AdminEditorialBrief {
+  articleId: string;
+  sourceTitle: string;
+  sourceUrl: string;
+  sourceName: string;
+  sourcePublishedAt: string | null;
+  reviewStatus: string;
+  track: EditorialBriefTrack;
+  title: string;
+  userJob: string;
+  intendedReader: string;
+  prerequisites: string;
+  stepsOutline: string;
+  evidenceNotes: string;
+  limitations: string;
+  validationPlan: string;
+  status: EditorialBriefStatus;
+  version: number;
+  updatedAt: string;
+  updatedBy: string;
+}
+export interface AdminEditorialBriefs { rows: AdminEditorialBrief[] }
+
 export interface AdminOpportunitySource {
   id: string;
   title: string;
