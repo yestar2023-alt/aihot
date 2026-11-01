@@ -20,16 +20,16 @@ export const EDITION_WHEN = {
 
 export const SITE = {
   /** 站名：导航、页面标题、分享图、RSS、MCP、后台都用它。 */
-  name: "AI Marketer Signal",
+  name: "AI Workflow Fieldbook",
   /**
    * 行业词：拼进默认说法里，比如“AI 日报”“AI 动态”。
    * 改成“法律”“HR”“黄金”之类，页面上就会变成“法律日报”“法律动态”。
    */
-  subject: "AI Marketing",
+  subject: "AI Workflows",
   /** 首页的完整标题（浏览器标签、搜索结果）。 */
-  homeTitle: "AI Marketer Signal | Curated AI Workflows for Marketers",
+  homeTitle: "AI Workflow Fieldbook | Build, Grow & Automate with AI",
   /** 主题目录页（/topics）的标题。 */
-  topicsTitle: "Marketing Automation Topics | AI Marketer Signal",
+  topicsTitle: "AI Workflows for Builders, Creators & Small Teams | AI Workflow Fieldbook",
   /** 反馈表单输入框里的示例。 */
   feedbackExample: "For example: the original source of a linked article appears incorrect...",
   /** 反馈页标题下面的一句话。 */
@@ -37,13 +37,13 @@ export const SITE = {
   /** 反馈表单邮箱框里的提示。 */
   feedbackEmailHint: "Email address (optional, for a reply)",
   /** 一句话介绍：搜索引擎、分享卡片、RSS、llms.txt 会用。 */
-  description: "Curated AI marketing workflows, practical playbooks, and trusted resources for content and growth marketers. Original sources linked; published only after editor review.",
+  description: "Practical AI workflows for independent makers and small teams. Build products, grow an audience, and automate repeatable work with source-linked guides and honest verification notes.",
   /** llms.txt 里一句话介绍下面的一段详细介绍（选填）。 */
   llmsIntro: null as string | null,
   /** 一行小字：分享图、海报下方。 */
-  tagline: "Less AI noise. More marketing workflows that work.",
+  tagline: "Build. Grow. Automate. Real work with AI.",
   /** 搜索引擎读到的关键词（首页结构化数据）。 */
-  keywords: ["AI marketing automation", "marketing workflows", "AI content repurposing", "AI for marketers", "n8n marketing"] as string[],
+  keywords: ["AI workflows", "AI for independent developers", "AI agents for small teams", "AI coding workflows", "SEO automation", "n8n workflows"] as string[],
   /** 网站开始收录的年份（结构化数据的时间范围，选填）。 */
   since: null as string | null,
   /** 界面语言（HTML lang、og:locale）。 */
@@ -65,7 +65,7 @@ export const SITE = {
   /** 对外联系邮箱（选填）：llms.txt 和给 Agent 的使用说明里会写。 */
   contactEmail: null as string | null,
   /** 关于页底部的一行小字（选填）。 */
-  footerNote: "Curated marketing automation resources. Sources remain with their original creators.",
+  footerNote: "Practical AI workflows for independent makers. Original creators and sources are credited.",
   /** 中国大陆网站的 ICP 备案号（选填），填了就显示在侧栏底部和“我的”页底部，并链接到工信部备案系统。 */
   icp: null as string | null,
   /** 中国大陆网站的公安备案信息（选填），填了显示在侧栏底部和“我的”页底部。 */
@@ -74,12 +74,12 @@ export const SITE = {
   github: "https://github.com/yestar2023-alt/aihot" as string | null,
   /** 结构化数据里的网站运营者（搜索引擎用）。 */
   organization: {
-    name: "AI Marketer Signal",
+    name: "AI Workflow Fieldbook",
     /** 创始人（选填）。 */
     founder: null as Founder | null,
   },
   /** 抓取信源时报上的名字和版本（User-Agent 里用），不要冒用别的站。 */
-  crawlerName: "AIMarketerSignalBot/0.1",
+  crawlerName: "AIWorkflowFieldbookBot/0.1",
 } as const;
 
 /** 使用规则和隐私说明两页（正文在 pages/ 里）。 */
@@ -143,20 +143,20 @@ interface ContactCard {
 
 /** 关于页的文案。数字（信源数、收录数、精选数、日报期数）来自站内实时统计，不用写在这里。 */
 export const ABOUT = {
-  kicker: `关于 ${SITE.name}`,
+  kicker: `About ${SITE.name}`,
   /** 页面描述（搜索结果、分享卡片）。 */
   description: `关于 ${SITE.name}：${SITE.description}`,
   /** 大标题：第一行正常颜色，第二行强调色。 */
-  headline: ["The AI internet never stops.", "We find the workflows worth your time."] as [string, string],
+  headline: ["Build useful things with AI.", "Spend less time figuring out how."] as [string, string],
   /** 标题下面的一段话。{sources} 会换成实时的信源数（两边自动加空格，所以 {sources} 两边不写空格）；统计没取到时换成 sourcesFallback。 */
-  lead: `${SITE.name} monitors {sources} sources to find useful AI marketing workflows, practical tutorials and credible product changes. Always follow the original source.`,
-  sourcesFallback: "十几",
+  lead: `${SITE.name} reviews {sources} sources for practical Build, Grow and Automate workflows with evidence and limitations. Always follow the original source.`,
+  sourcesFallback: "multiple",
   /** 信源河动画下面的四个环节。 */
   steps: {
-    collect: "官方博客、媒体和个人的订阅源都在看；更新越勤的源看得越勤，最快 15 分钟看一次。",
-    store: "抓到的都存下来，同一件事的报道归到一起，热点榜就是从这里算出来的。",
+    collect: "Collect public documentation and creator examples into a private research queue; do not treat configuration as proof of live monitoring.",
+    store: "Preserve source links, group possible related material, and distinguish author claims from verified facts.",
     select: `AI ranks relevance and practical utility; editors must verify high-value items and licenses before independent SEO publishing.`,
-    publish: `${EDITION_WHEN.daily} 出日报，${EDITION_WHEN.weekly} 出周报，${EDITION_WHEN.monthly} 出月报。`,
+    publish: "Only a separately approved and explicitly released editorial summary may enter public Signals.",
   },
   /**
    * 作者块（选填），null 就不显示。
