@@ -1,25 +1,35 @@
-# AI Marketer Signal — implementation and launch handbook
+# AI Workflow Fieldbook — implementation and launch handbook
 
 > **Status: substantial working MVP code on a development PR, NOT a live production service.** Provisional brand/domain. Existing AIHOT engine under MIT license; preserve its LICENSE and NOTICE. Never assume connected platform APIs or mailing-list services exist until credentials, permissions and live tests confirm them.
 
 ## Product boundary
 
-AI Marketer Signal is an **English-first, task-led editorial publication for marketers**, not an AI-tool directory or a mass AI-news rewrite site. Three work streams: curated source-linked Signals, source-led Playbooks, and a biweekly Digest. Source discovery is primarily internal; publication always requires human action.
+AI Workflow Fieldbook is an **English-first, task-led editorial fieldbook for independent makers, creators and lean teams**, not an AI-tool directory or a mass AI-news rewrite site. Three reader tracks: **Build / Grow / Automate**. Delivery formats remain curated Signals, source-led Playbooks and an optional biweekly Digest. Source discovery is primarily internal; publication always requires human action.
 
 ## Implemented code
 
 | Layer | Implementation |
 |---|---|
 | English front door | New `/` marketing home, `/signals`, `/playbooks`, `/playbooks/:slug`, `/newsletter`, `/about`, and English draft legal pages `/terms` and `/privacy`. Main navigation and wordmark are English. Previous engine home is preserved under **noindex `/archive`** for regression analysis. |
-| Editorial Playbooks | Three original, English task-led guides: content repurposing, weekly GA4 reporting, and RSS editorial intake. Each states prerequisites, steps, checklists, pitfalls, official-source URLs and **not independently tested** status. No invented workflow tests or downloads. Data is shared in `site/playbooks.ts` for site and sitemap. |
+| Editorial Playbooks | Five original, English task-led guides across Build, Grow and Automate: site shipping, SEO page research, content repurposing, weekly GA4 reporting, and RSS editorial intake. Each states prerequisites, steps, checklists, pitfalls, official-source URLs and **not independently tested** status. No invented workflow tests or downloads. Data is shared in `site/playbooks.ts` for site and sitemap. |
 | Intake | Authenticated `/admin/save-source` and `POST /api/admin/bookmark` normalize X/Twitter statuses, GitHub repositories/releases/issues, and YouTube videos. Only metadata and canonical URL enter the system. Existing `/admin/save-x` and CLI remain supported. No platform scraping/API calls. |
-| Six candidate feeds | n8n Blog, Buffer Resources, HubSpot Marketing Blog, Make Blog, n8n GitHub releases Atom, n8n YouTube channel RSS. All seeded as **isolated**, no full-text republication or automatic release. **Must test actual parser compatibility, live HTTP access and backfill boundaries.** |
+| Candidate discovery feeds | 24 RSS/Atom candidates (including 2 newly disabled Build-focused GitHub Releases sources) plus 10 disabled X query presets. Legacy marketing sources stay useful under Grow and Automate. All seeded as **isolated**, no full-text republication or automatic release. **Must test actual parser compatibility, live HTTP access and backfill boundaries.** |
 | Curation | `/admin/curation` with `inbox → shortlisted → fact_checked → approved`, rejection/reopening/revocation, source evidence, detailed notes, optimistic versions and transactional audits. A fact-check requires an HTTPS evidence URL and explanatory note. |
 | Publishing | A **separate explicit admin release** is required after approval. `curation_releases` records a human-written title/summary, review version and release/withdraw events. Public query rechecks current approval, review version, source isolation, source enabled flag and release state. |
 | Public releases | `/signals`, `GET /api/site/signals`, `/feed/signals.xml`; short caching and withdraw. Playbooks and, when released, Signals are included in sitemap. **The legacy AIHOT automatic news/report channels are not this editorial release system.** |
 | Digest | `/admin/digest` builds an editable Markdown draft from *publicly released* Signals plus linked Playbooks. Sending is deliberately manual until a verified provider is connected; editing does not auto-email. |
 | Email opt-in | `/newsletter` supports Buttondown's standard HTML `POST /api/emails/embed-subscribe/{username}` flow (not JavaScript fetch). It remains disabled without `BUTTONDOWN_USERNAME`; no fake signup or claims of sends. |
 | Operational safety | Collection/model calls default off in `.env.example`. Seed feeds and manual bookmark source IDs are protected from being switched to automatic publication by ordinary source edits. |
+
+## Revised audience and positioning (2026-11-01)
+
+The public website is no longer limited to marketing operators. It now addresses independent developers, creators and small teams wanting repeatable AI workflows for **Build / Grow / Automate**. Marketing remains a subset of Grow; existing SEO and lifecycle seed IDs and archived data remain intact.
+
+- **Provisional name only:** AI Workflow Fieldbook (no domain reservation or trademark verification).
+- **Source map:** fine-grained research subdomains have parent reader tracks; Build now includes AI Coding & Product Building. New Build feed candidates start disabled.
+- **Playbooks:** five guides are currently authored as documented starting points; none claims an independently executed production workflow.
+- **Validation plan:** see [Maker positioning validation](maker-validation-plan.md) for a 30-day, nine-topic *experiment backlog*, not nine falsely published tests.
+- **Compatibility:** old database IDs, original report machinery, MCP prefix and automated editorial publication safeguards are preserved. No automatic production deployment.
 
 ## Local run / smoke test
 
@@ -33,7 +43,7 @@ AI Marketer Signal is an **English-first, task-led editorial publication for mar
 
 ## Feed operations: no purchased APIs required for first look
 
-- Seed sources come from `industry/sources.json`. Initial backfill is limited to five items per source. Inspect the **source preview** in admin and verify item URLs, original author, date precision and whether YouTube Atom and GitHub releases Atom parse on your host.
+- Seed sources come from `industry/sources.json`. Initial backfill is capped at five items per source (two for new Build sources). Inspect the **source preview** in admin and verify item URLs, original author, date precision and whether YouTube Atom and GitHub releases Atom parse on your host.
 - Because the source seed is **import-only**, removing entries from that file does **not** remove previous sources from an existing PostgreSQL instance. Disable old generic AIHOT feeds manually in admin and verify none remain publicly selected.
 - Once the fetch behavior, copyright position and cost/quotas are confirmed, enable collection with a scoped provider/budget. AI model ranking alone must **not** publish.
 - X account/search monitoring via AIHOT's existing third-party integration is **not configured**. For now X URL intake works without an X API key; reading X post text automatically requires licensed and cost-controlled access.
