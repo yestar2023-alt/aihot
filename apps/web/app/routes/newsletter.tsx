@@ -17,8 +17,8 @@ export async function loader() {
 export const headers: Route.HeadersFunction = () => ({ "Cache-Control": "no-store" });
 export function meta() {
   return pageMeta({
-    title: "The Signal Digest — AI Marketing Newsletter", path: "/newsletter",
-    description: "A focused biweekly roundup of AI marketing workflows, useful experiments and source-linked guides. No daily hype.",
+    title: "The Fieldbook Digest — Practical AI Workflows", path: "/newsletter",
+    description: "A biweekly roundup of AI coding, product growth and useful automations for independent makers and small teams.",
   });
 }
 export default function Newsletter() {
@@ -28,8 +28,8 @@ export default function Newsletter() {
     <main className="mx-auto max-w-[900px] px-4 pb-24 pt-10 sm:px-6 lg:pt-16">
       <div className="mx-auto max-w-2xl text-center">
         <p className="text-[12px] font-semibold uppercase tracking-[0.19em] text-accent">THE SIGNAL DIGEST</p>
-        <h1 className="mt-4 text-[36px] font-bold leading-tight tracking-tight text-ink sm:text-[50px]">One useful AI marketing email. Every two weeks.</h1>
-        <p className="mt-5 text-[16px] leading-[1.85] text-ink-3">A few credible workflow ideas, practical marketing automations, and the original links behind them. Built for people who actually have campaigns to run.</p>
+        <h1 className="mt-4 text-[36px] font-bold leading-tight tracking-tight text-ink sm:text-[50px]">Useful AI workflows. One email every two weeks.</h1>
+        <p className="mt-5 text-[16px] leading-[1.85] text-ink-3">Useful product-building, distribution and automation ideas, always linked to their original sources. Built for makers with products to ship and small teams with work to do.</p>
       </div>
       <section className="mx-auto mt-10 max-w-xl rounded-panel bg-surface p-6 ring-1 ring-line sm:p-8">
         {action ? (
@@ -55,7 +55,7 @@ export default function Newsletter() {
       </section>
       <section className="mx-auto mt-12 grid max-w-3xl gap-4 sm:grid-cols-3">
         {[
-          ["What works", "Actionable workflows and real marketing tasks, not generic AI headlines."],
+          ["What works", "Practical building, growth and automation tasks, not generic AI headlines."],
           ["What changed", "Material tool/API updates that affect your process or costs."],
           ["What to try", "Links to practical playbooks, templates and original documentation."],
         ].map(([title,copy]) => (
