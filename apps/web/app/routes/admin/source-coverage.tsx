@@ -4,6 +4,7 @@ import type { Route } from "./+types/source-coverage";
 import type { AdminSourceCoverage, AdminSourcePreview, SourceCoverageEntry, SourceCoverageState } from "@aihot/contracts/admin";
 import { useAdminAction } from "../../features/admin/action";
 import { SITE } from "@aihot/site";
+import { MARKETING_LANES, WORK_TRACKS } from "@aihot/industry/source-coverage";
 import { adminGet } from "../../lib/admin.server";
 import { AdminPage, Badge, Card, Stat } from "../../features/admin/ui";
 
@@ -78,11 +79,13 @@ function SourceCard({ entry }: { entry: SourceCoverageEntry }) {
 }
 export default function SourceCoveragePage({ loaderData }: Route.ComponentProps) {
   const { lanes, entries, checkedAt, expected, imported, observedOk, untested, unsafeModes } = loaderData;
+  const [track, setTrack] = useState("All");
   const [lane, setLane] = useState("all");
   const [onlyIssues, setOnlyIssues] = useState(false);
   const visible = useMemo(() => entries.filter(e =>
+    (track === "All" || e.lanes.some(l => MARKETING_LANES.find(m => m.id === l)?.track === track)) &&
     (lane === "all" || e.lanes.includes(lane)) && (!onlyIssues || e.state !== "observed_ok")
-  ), [entries, lane, onlyIssues]);
+  ), [entries, track, lane, onlyIssues]);
   return <AdminPage title="Source Radar · Domain Coverage"
     subtitle="A database view of candidate sources for makers, growth and automation. No source is considered live solely because it exists in configuration."
     actions={<Link to="/admin/sources" className="rounded-control px-3 py-2 text-[13px] font-semibold text-accent ring-1 ring-line">All source settings →</Link>}
@@ -95,9 +98,13 @@ export default function SourceCoveragePage({ loaderData }: Route.ComponentProps)
       <Stat label="Unsafe source modes" value={unsafeModes} tone={unsafeModes ? "bad" : "ok"} />
     </div>
     <p className="mt-3 text-[12px] text-ink-4">Calculated at {new Date(checkedAt).toLocaleString("en-US")}. All counts come from stored runs, not assumed connectivity. Source collection and LLM budgets remain controlled separately.</p>
+    <div className="mt-8 flex flex-wrap gap-2" aria-label="Work track filters">
+      {["All", ...WORK_TRACKS].map(t => <button key={t} type="button" onClick={() => { setTrack(t); setLane("all"); }} aria-pressed={track === t}
+        className={`rounded-full px-4 py-2 text-[13px] font-medium ring-1 ring-line ${track===t ? "bg-ink text-bg" : "bg-surface text-ink"}`}>{t}</button>)}
+    </div>
     <h2 className="mb-4 mt-9 text-[20px] font-semibold text-ink">Coverage by research domain</h2>
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-      {lanes.map(l => <button key={l.id} type="button" onClick={() => { setLane(lane === l.id ? "all" : l.id); }}
+      {lanes.filter(l => track === "All" || MARKETING_LANES.find(m => m.id === l.id)?.track === track).map(l => <button key={l.id} type="button" onClick={() => { setLane(lane === l.id ? "all" : l.id); }}
         aria-pressed={lane === l.id} className={`rounded-panel p-4 text-left ring-1 transition-colors ${lane === l.id ? "bg-accent-soft ring-accent/35" : "bg-surface ring-line hover:bg-bg-sunk"}`}>
         <div className="text-[14px] font-semibold text-ink">{l.title}</div>
         <p className="mt-1 text-[12px] leading-relaxed text-ink-3">{l.description}</p>
