@@ -73,7 +73,7 @@ export default function MarketingHome() {
         </div>
         <div className="mb-6 grid gap-3 sm:grid-cols-3">
           {PLAYBOOK_TRACKS.map(t => (
-            <Link key={t.key} to={`/playbooks?track=${t.key}`} className="rounded-panel bg-bg-sunk p-4 ring-1 ring-line hover:bg-surface">
+            <Link key={t.key} to={`/workflows/${t.key.toLowerCase()}`} className="rounded-panel bg-bg-sunk p-4 ring-1 ring-line hover:bg-surface">
               <h3 className="text-[18px] font-bold text-ink">{t.title} →</h3>
               <p className="mt-2 text-[13px] leading-relaxed text-ink-3">{t.description}</p>
               <span className="mt-3 inline-block text-[12px] font-medium text-accent">{PLAYBOOKS.filter(p => p.track === t.key).length} starter guides</span>
