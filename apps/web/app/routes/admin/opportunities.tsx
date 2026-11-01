@@ -21,6 +21,8 @@ export const headers: Route.HeadersFunction=()=>({"Cache-Control":"no-store","X-
 function Opportunity({ lead }: { lead: AdminEditorialOpportunity }) {
   const [open,setOpen]=useState(false);
   const {run,pending}=useAdminAction();
+  const navigate=useNavigate();
+  const suggestedTrack=MARKETING_LANES.find(m=>lead.lanes.includes(m.id))?.track ?? "Automate";
   const representative=lead.sources[0];
   return <article className="rounded-panel border border-line bg-surface p-5">
     <div className="flex flex-wrap items-center justify-between gap-3">
@@ -52,6 +54,13 @@ function Opportunity({ lead }: { lead: AdminEditorialOpportunity }) {
         {status:"shortlisted",version:representative.reviewVersion,note:"Editorial triage from Opportunity Radar. Original source, claim details, rights and any related coverage still require manual fact-checking.",evidenceUrl:""},
         {label:"shortlist:"+lead.key,success:"Candidate shortlisted privately; no publication performed."},
       )}>Shortlist for review</Button>}
+      <Button size="sm" disabled={!!pending} busy={pending==="create-brief:"+lead.key} onClick={async()=>{
+        const result=await run<{articleId:string,private:boolean}>("POST",
+          `/api/admin/briefs/${encodeURIComponent(representative.id)}`,
+          {track:suggestedTrack},
+          {label:"create-brief:"+lead.key,success:"Private Playbook brief opened; verify the source before writing."});
+        if(result?.private)navigate(`/admin/briefs/${encodeURIComponent(result.articleId)}`);
+      }}>Create private Playbook brief</Button>
       <Link to={`/admin/content?q=${encodeURIComponent(representative.url)}`} className="text-[13px] text-accent underline">Inspect item</Link>
     </div>
     {open && <div className="mt-4 border-t border-line pt-3">
