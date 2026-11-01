@@ -28,7 +28,7 @@ export default function SignalsPage() {
   return (
     <main className="mx-auto max-w-[860px] px-4 pb-24 pt-7 sm:px-6 lg:pt-10">
       <header className="mb-8">
-        <div className="mb-2 text-[11px] font-semibold uppercase tracking-[0.19em] text-accent">AI Marketer Signal</div>
+        <div className="mb-2 text-[11px] font-semibold uppercase tracking-[0.19em] text-accent">AI Workflow Fieldbook</div>
         <h1 className="text-[31px] font-bold tracking-tight text-ink sm:text-[42px]">Signals, not noise.</h1>
         <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-ink-3">
           Useful ideas and workflows for Build, Grow and Automate.
