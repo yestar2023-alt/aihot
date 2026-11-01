@@ -8,12 +8,12 @@ export const handle: Screen = { tab: "me", name: "About" };
 export const headers = () => edgeTtl(300);
 export function meta() {
   return pageMeta({ title: "About the Editorial Process", path: "/about",
-    description: "How AI Marketer Signal selects, attributes and reviews practical AI marketing ideas." });
+    description: "How AI Workflow Fieldbook selects and reviews practical AI workflows for makers and small teams." });
 }
 const standards = [
-  ["Find the original", "We prioritize original posts, creators, repositories, official documentation and firsthand marketing cases over unattributed reposts."],
+  ["Find the original", "We prioritize original creators, technical documentation, repositories, reproducible workflows and firsthand maker experiences over unattributed reposts."],
   ["Check the claim", "We separate what the author says from what can be verified. Dates, metrics, access requirements and feature support are never guessed."],
-  ["Make it useful", "Each public Signal explains a practical job for marketers. Longer Playbooks add clear steps, prerequisites, limitations and sources."],
+  ["Make it useful", "Each public Signal connects to a task in Build, Grow or Automate. Playbooks add steps, prerequisites, validation checks, limitations and primary sources."],
   ["Publish deliberately", "Automated collection and ranking happen privately; editorial approval is separate from an explicit public release decision."],
 ];
 export default function AboutMarketing() {
@@ -21,7 +21,7 @@ export default function AboutMarketing() {
     <main className="mx-auto max-w-[880px] px-4 pb-24 pt-10 sm:px-6 lg:pt-16">
       <p className="text-[12px] font-bold uppercase tracking-[0.18em] text-accent">OUR EDITORIAL APPROACH</p>
       <h1 className="mt-3 text-[36px] font-bold leading-tight tracking-tight text-ink sm:text-[48px]">Less discovery work. More real work.</h1>
-      <p className="mt-5 text-[16px] leading-[1.85] text-ink-3">{SITE.name} is an English-language publication about AI-assisted marketing operations. We collect candidate sources across X, blogs, repositories and tutorials, then turn only the useful ones into attributed Signals and practical guides.</p>
+      <p className="mt-5 text-[16px] leading-[1.85] text-ink-3">{SITE.name} is an English-language field guide for independent makers, creators and small teams using AI to build products, grow distribution and automate repeatable work. We collect candidate sources across X, blogs, repositories and tutorials, then turn only the useful ones into attributed Signals and practical guides.</p>
       <div className="mt-10 grid gap-4 sm:grid-cols-2">
         {standards.map(([title,text]) => (
           <section key={title} className="rounded-panel bg-surface p-6 ring-1 ring-line">
