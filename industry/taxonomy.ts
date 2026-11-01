@@ -17,11 +17,12 @@ export const CATEGORIES = [
   { key: "industry", tagColor: "orange", label: "行业", feedLabel: "行业动态", section: "行业动态", guide: "已发生的公司经营、融资并购、人事、合作、诉讼、政策、真实安全事故及调查进展。新闻由当事人发帖、带有态度，也不因此变成观点。" },
   { key: "paper", tagColor: "violet", label: "论文", feedLabel: "论文", section: "论文研究", guide: "以新研究方法、实验设计与发现为核心的论文、技术报告、新基准或研究数据集。系统性红队实验属于研究；既有榜单成绩归模型，真实事故的新闻调查归行业。" },
   { key: "tip", tagColor: "green", label: "教程", section: "技巧与观点", guide: "读者可以照着使用的方法、提示词、工具用法、工程实践复盘与技术讲解。重点是可复用的做法；单纯发布工具归产品，只有态度和预测而无做法归观点。", commentary: true },
-  { key: "workflow", tagColor: "green", label: "Workflows", section: "Reusable marketing workflows", guide: "Repeatable, actionable marketing automations with inputs, triggers, outputs, permissions and validation.", commentary: true },
-  { key: "content", tagColor: "turquoise", label: "Content Ops", section: "AI content & social", guide: "Content planning, repurposing, publishing and human review with specific marketer use cases." },
+  { key: "build", tagColor: "indigo", label: "Build", section: "Build products with AI", guide: "Ship or improve AI-assisted websites, apps and agents: coding, debugging, testing, releases, API integration and reliable deployment; require reproducible steps or credible first-party evidence.", commentary: true },
+  { key: "workflow", tagColor: "green", label: "Automate", section: "Repeatable workflows", guide: "Repeatable workflows for makers and small teams: n8n/Make, research, content, reporting and operations with inputs, triggers, output, permissions and checks.", commentary: true },
+  { key: "content", tagColor: "turquoise", label: "Content", section: "Grow with content", guide: "Source-based content creation, owned-content repurposing and distribution for independent makers, creators and small teams." },
   { key: "analytics", tagColor: "violet", label: "Analytics", section: "Marketing measurement", guide: "Marketing reporting and data automation with reproducible methods." },
-  { key: "growth", tagColor: "indigo", label: "Growth", section: "Lifecycle & growth", guide: "CRM, lead ops, email, experiments and retention workflows with verifiable results." },
-  { key: "tools", tagColor: "orange", label: "Marketing tools", section: "AI tools & integrations", guide: "Important changes to AI marketing software, integrations, access and pricing, not generic AI directories." },
+  { key: "growth", tagColor: "indigo", label: "Grow", section: "Grow distribution & customers", guide: "SEO, research, product distribution, lifecycle and growth experiments that serve makers with verifiable evidence." },
+  { key: "tools", tagColor: "orange", label: "Tools", section: "Relevant tools & integrations", guide: "Changes to developer tools, AI platforms or marketing integrations that directly change Build/Grow/Automate workflows. No generic AI directories." },
   { key: "opinion", tagColor: "purple", label: "观点", section: "技巧与观点", guide: "重点是作者的解释、判断、主张、预测、评论或访谈观点。讨论市场不自动归行业，作者是名人不自动归观点。", commentary: true },
 ] as const satisfies ReadonlyArray<{ key: string; tagColor: string; label: string; feedLabel?: string; section: string; guide: string; commentary?: true }>;
 
@@ -30,7 +31,7 @@ export const CATEGORIES = [
  * category 是类别，tag 是标签，两者都对上才算；unit 接在数字后面。
  * 没有这样一类的行业设成 null，报头就不显示这个数。
  */
-export const RELEASE: { category: string; tag: string; unit: string } | null = { category: "ai-models", tag: "模型发布", unit: "个新模型" };
+export const RELEASE: { category: string; tag: string; unit: string } | null = null;
 
 /** 周报月报的总述可以直接写、不必在报道里找到出处的行业通用词（小写）。站名会自动算进去。 */
 export const PLAIN_TERMS: readonly string[] = ["ai", "api", "llm", "gpu", "agi", "ceo", "ipo"];
@@ -47,12 +48,12 @@ export const ITEM_TYPES = ["model_release", "product_launch", "tool_or_prompt", 
 export const CATEGORY_TAGS = [
   "产品更新", "模型发布", "论文/研究", "开源/仓库", "教程/实践", "现象/趋势", "大佬观点", "评测/基准", "安全/对齐", "行业动态", "政策/监管",
   "非AI/通用工具", "其他",
-  "Workflow", "Content Ops", "Analytics", "Growth", "Tool Update", "Case Study", "Tool Comparison", "Tutorial", "Original Research", "Industry Insight",
+  "Build", "Workflow", "Content Ops", "Analytics", "Growth", "Tool Update", "Case Study", "Tool Comparison", "Tutorial", "Original Research", "Industry Insight",
 ] as const;
 
 /** 可选的主题标签。 */
 export const TOPIC_TAGS = [
-  "Automation", "Content Repurposing", "Social Media", "Content Planning", "Email Marketing", "Lead Follow-up", "CRM", "Reporting", "Attribution", "AI Agents", "SEO", "Video", "Community", "Newsletter", "Paid Ads", "PPC", "Conversion Optimization", "Ecommerce", "AEO", "Email Deliverability", "Marketing Experiments", "Lifecycle",
+  "AI Coding", "Web Development", "MVP", "Product Development", "AI Agent Development", "Testing", "Deployment", "Distribution", "Developer Tooling", "Automation", "Content Repurposing", "Social Media", "Content Planning", "Email Marketing", "Lead Follow-up", "CRM", "Reporting", "Attribution", "AI Agents", "SEO", "Video", "Community", "Newsletter", "Paid Ads", "PPC", "Conversion Optimization", "Ecommerce", "AEO", "Email Deliverability", "Marketing Experiments", "Lifecycle",
   "Agent", "编码", "推理", "多模态", "语音", "视频", "图像生成", "RAG", "端侧", "数据/训练", "搜索", "部署/工程", "开源生态", "具身智能", "MCP/工具调用",
 ] as const;
 
@@ -61,6 +62,7 @@ export const ENTITY_TAGS = ["OpenAI", "Anthropic", "DeepSeek", "DeepMind", "Goog
 
 /** 模型常写的近义词，统一成词表里的写法。 */
 export const TAG_SYNONYMS: Readonly<Record<string, string>> = {
+  "ai coding": "AI Coding", "agent development": "AI Agent Development", "web app": "Web Development", "product launch": "Product Development",
   automation: "Automation", workflows: "Workflow", workflow: "Workflow",
   repurposing: "Content Repurposing", "social marketing": "Social Media", reporting: "Reporting",
   "教程/玩法": "教程/实践", "技巧/最佳实践": "教程/实践", "合作/生态": "行业动态", "融资/收购": "行业动态", "公司动态": "行业动态",
