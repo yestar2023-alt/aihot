@@ -1,7 +1,7 @@
 // Admin-only source coverage and health dashboard for the private marketing candidate feeds.
 // No HTTP requests, no scraping, no background calls: figures reflect stored DB evidence only.
 import { MARKETING_LANES, MARKETING_SOURCE_LANES, PRIVATE_MARKETING_SEED_IDS, type MarketingLane } from "@aihot/industry/source-coverage";
-import type { AdminSourceCoverage, SourceCoverageEntry, SourceCoverageState } from "@aihot/contracts/admin";
+import type { AdminSourceCoverage, SourceCoverageEntry, SourceCoverageState, BeforeJson } from "@aihot/contracts/admin";
 import { sql } from "../db.ts";
 
 interface Stored {
@@ -38,7 +38,7 @@ export function candidateState(row: Pick<Stored,
   return "observed_ok";
 }
 
-export async function sourceCoverage(): Promise<AdminSourceCoverage> {
+export async function sourceCoverage(): Promise<BeforeJson<AdminSourceCoverage>> {
   const now = new Date();
   const rows = await sql<Stored[]>`
     SELECT s.id, s.name, s.kind, s.participation_mode, s.enabled, s.health, s.fail_count,
@@ -56,7 +56,7 @@ export async function sourceCoverage(): Promise<AdminSourceCoverage> {
     WHERE s.id = ANY(${PRIVATE_MARKETING_SEED_IDS}::text[])
   `;
   const byId = new Map(rows.map(row => [row.id, row]));
-  const entries: SourceCoverageEntry[] = PRIVATE_MARKETING_SEED_IDS.map(id => {
+  const entries: BeforeJson<SourceCoverageEntry>[] = PRIVATE_MARKETING_SEED_IDS.map(id => {
     const row = byId.get(id);
     const lanes = [...MARKETING_SOURCE_LANES[id as keyof typeof MARKETING_SOURCE_LANES]] as MarketingLane[];
     if (!row) {
@@ -69,8 +69,8 @@ export async function sourceCoverage(): Promise<AdminSourceCoverage> {
     return {
       id, name: row.name, kind: row.kind, lanes, state: candidateState(row, now), health: row.health,
       enabled: row.enabled, isolated: row.participation_mode === "isolated",
-      items7d: row.items_7d, lastOkAt: row.last_ok_at?.toISOString() ?? null,
-      lastFetchAt: row.last_fetch_at?.toISOString() ?? null, lastRunAt: row.run_started_at?.toISOString() ?? null,
+      items7d: row.items_7d, lastOkAt: row.last_ok_at,
+      lastFetchAt: row.last_fetch_at, lastRunAt: row.run_started_at,
       lastRunStatus: row.run_status, lastFound: row.run_found, lastNew: row.run_new,
       lastError: row.last_error,
     };
@@ -86,7 +86,7 @@ export async function sourceCoverage(): Promise<AdminSourceCoverage> {
     };
   });
   return {
-    checkedAt: now.toISOString(), expected: entries.length,
+    checkedAt: now, expected: entries.length,
     imported: entries.filter(x => x.state !== "not_imported").length,
     observedOk: entries.filter(x => x.state === "observed_ok").length,
     untested: entries.filter(x => ["not_imported", "not_tested", "never_successful"].includes(x.state)).length,
