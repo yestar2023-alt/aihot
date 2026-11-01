@@ -1,9 +1,9 @@
-# AI Marketer Signal — source coverage and ingestion policy
+# AI Workflow Fieldbook — source coverage and ingestion policy
 Last researched: 2026-11-01 · Provisional brand · English-first editorial project
 
 ## Read this before enabling a worker
 
-The shipped seed list is [industry/sources.json](../industry/sources.json). At the current revision there are **22 candidate RSS/Atom feed configurations plus 10 disabled X keyword searches**, all `participation_mode: isolated`, with full-text redistribution explicitly off. **Configured does not mean a production fetch has succeeded**. Each feed needs an isolated preview on the deployment host and content/date validation before enabling collection.
+The shipped seed list is [industry/sources.json](../industry/sources.json). At the current revision there are **24 candidate RSS/Atom feed configurations plus 10 disabled X keyword searches**, all `participation_mode: isolated`, with full-text redistribution explicitly off. **Configured does not mean a production fetch has succeeded**. Each feed needs an isolated preview on the deployment host and content/date validation before enabling collection.
 
 The private admin link-saving form supports a canonical link from X, GitHub or YouTube, but it **does not** read the linked post or video text and does not represent continuous monitoring. Original X/API credentials, licensed video transcription, Reddit access and paid third-party data are not connected. Existing sources stored in a real database are not deleted merely because a seed is removed from JSON.
 
@@ -67,11 +67,11 @@ For an important item, triangulate at least two independent evidence types (e.g.
 ### Source Radar admin implementation
 
 - Admin navigation: **Source Radar** (`/admin/source-coverage`); authenticated endpoint `GET /api/admin/source-coverage`.
-- Uses the one-to-many canonical lane mapping `industry/source-coverage.ts`, covering exactly the 32 IDs in `industry/sources.json` (22 RSS + 10 disabled X keyword presets). New seeds must be added to both files or registry tests fail.
+- Uses the one-to-many canonical lane mapping `industry/source-coverage.ts`, covering exactly the 34 IDs in `industry/sources.json` (24 RSS + 10 disabled X keyword presets). New seeds must be added to both files or registry tests fail.
 - Source statuses: `not_imported` (seed not in DB), `not_tested` (no recorded fetch), `never_successful`, `failing`, `degraded`, `stale`, `overdue`, `paused`, and `observed_ok` (recent successful collection). A successful fetch is **not** source credibility or copyright clearance.
 - Each card shows recent fetch time/status, found/new counts, errors, items collected over seven days and linked marketing lanes. X keyword presets display separately and are not eligible for one-click preview here to prevent accidental paid API requests. The dashboard does not make external calls during initial load.
 - A human can click **Preview live feed** on one imported RSS source. It uses the project's existing authenticated preview endpoint and does **not** store candidates, trigger an LLM, or grant publication permission. A preview success is transient, not recorded as a durable fetch unless the normal collector subsequently runs.
-- `packages/backend/src/admin/sources.ts` derives its protected source IDs from this same registry, so all 32 seeds cannot be flipped to public editorial participation or full-text redistribution through routine admin edits. The manual X, GitHub and YouTube buckets are likewise protected.
+- `packages/backend/src/admin/sources.ts` derives its protected source IDs from this same registry, so all 34 seeds cannot be flipped to public editorial participation or full-text redistribution through routine admin edits. The manual X, GitHub and YouTube buckets are likewise protected.
 - The default admin **Source** creation form still needs operators to provide the actual feed URL and credentials. A seed missing from an already-running database does not magically appear by changing this JSON; explicitly import approved candidates through the project's supported source creation workflow.
 
 ## Operational plan
