@@ -2,6 +2,7 @@ import { Link, useLoaderData } from "react-router";
 import type { Route } from "./+types/marketing-home";
 import type { SignalFeed } from "@aihot/contracts/signals";
 import { SITE } from "@aihot/site";
+import { PLAYBOOK_TRACKS } from "@aihot/site/playbooks";
 import { PLAYBOOKS } from "../content/playbooks";
 import { cachedPage, loadOr404 } from "../lib/api.server";
 import { pageReuse } from "../lib/page-reuse";
@@ -28,29 +29,29 @@ export default function MarketingHome() {
         <section>
           <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-accent-soft px-3 py-1.5 text-[12px] font-semibold text-accent">
             <span className="size-2 rounded-full bg-accent" />
-            Curated AI for real marketing work
+            Practical AI for makers and lean teams
           </div>
           <h1 className="max-w-[760px] text-[40px] font-bold leading-[1.09] tracking-[-0.05em] text-ink sm:text-[58px] lg:text-[65px]">
-            Less AI noise.<br/><span className="text-accent">More work that works.</span>
+            Build. Grow.<br/><span className="text-accent">Automate.</span>
           </h1>
           <p className="mt-6 max-w-[630px] text-[16px] leading-[1.85] text-ink-3 sm:text-[18px]">
-            The useful end of AI marketing: handpicked workflows, source-linked playbooks and honest notes on what is actually worth trying.
-            Not a 1,000-tool directory. Not a rewritten news feed.
+            Practical AI workflows to ship products, find customers and run small teams more efficiently.
+            Real tasks, source-linked steps and clear limitations—not another tool directory or recycled news feed.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link to="/playbooks" className="inline-flex items-center rounded-control bg-ink px-5 py-3 text-[14px] font-semibold text-bg hover:opacity-85">Explore Playbooks →</Link>
             <Link to="/signals" className="inline-flex items-center rounded-control bg-surface px-5 py-3 text-[14px] font-semibold text-ink ring-1 ring-line-strong hover:bg-bg-sunk">Read Signals</Link>
           </div>
-          <p className="mt-5 text-[12px] leading-relaxed text-ink-4">Original creators linked · Claims attributed · Publication reviewed by an editor</p>
+          <p className="mt-5 text-[12px] leading-relaxed text-ink-4">For indie developers, creators and small teams · Original sources linked · Editorial review before public release</p>
         </section>
         <aside className="self-center rounded-panel bg-surface p-6 ring-1 ring-line sm:p-7">
-          <p className="text-[11px] font-bold uppercase tracking-[0.19em] text-ink-4">YOUR MARKETING AI FIELD GUIDE</p>
-          <h2 className="mt-4 text-[24px] font-semibold leading-snug text-ink">Start with the task. Then choose the tools.</h2>
+          <p className="text-[11px] font-bold uppercase tracking-[0.19em] text-ink-4">START WITH THE JOB TO BE DONE</p>
+          <h2 className="mt-4 text-[24px] font-semibold leading-snug text-ink">Find the next useful workflow.</h2>
           <div className="mt-6 space-y-5">
             {[
-              ["01","Repurpose content","Turn approved source material into channel-specific drafts."],
-              ["02","Automate reporting","Build reliable metrics pipelines with human checks."],
-              ["03","Find worthwhile ideas","Monitor sources, deduplicate, and decide what to act on."],
+              ["01","Build","Ship a small AI-assisted site, automate code reviews, or prototype an agent."],
+              ["02","Grow","Find search demand, improve distribution and repurpose original content."],
+              ["03","Automate","Connect repeatable research, reporting and operations without losing human control."],
             ].map(([n,title,desc])=>(
               <div key={n} className="flex gap-3">
                 <span className="font-mono text-[13px] font-semibold text-accent">{n}</span>
@@ -65,15 +66,24 @@ export default function MarketingHome() {
         <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-[12px] font-semibold uppercase tracking-[0.16em] text-accent">USEFUL, REPRODUCIBLE WORK</p>
-            <h2 className="mt-2 text-[27px] font-bold tracking-tight text-ink sm:text-[32px]">Playbooks for real marketing tasks</h2>
-            <p className="mt-2 text-[14px] text-ink-3">Sourced guides with prerequisites, review checkpoints and limitations.</p>
+            <h2 className="mt-2 text-[27px] font-bold tracking-tight text-ink sm:text-[32px]">Guides for real work</h2>
+            <p className="mt-2 text-[14px] text-ink-3">Browse tasks across Build, Grow and Automate. Practical steps and verification before hype.</p>
           </div>
           <Link to="/playbooks" className="text-[13px] font-semibold text-accent hover:underline">All Playbooks →</Link>
         </div>
+        <div className="mb-6 grid gap-3 sm:grid-cols-3">
+          {PLAYBOOK_TRACKS.map(t => (
+            <Link key={t.key} to={`/playbooks?track=${t.key}`} className="rounded-panel bg-bg-sunk p-4 ring-1 ring-line hover:bg-surface">
+              <h3 className="text-[18px] font-bold text-ink">{t.title} →</h3>
+              <p className="mt-2 text-[13px] leading-relaxed text-ink-3">{t.description}</p>
+              <span className="mt-3 inline-block text-[12px] font-medium text-accent">{PLAYBOOKS.filter(p => p.track === t.key).length} starter guides</span>
+            </Link>
+          ))}
+        </div>
         <div className="grid gap-4 md:grid-cols-3">
-          {PLAYBOOKS.map(p=>(
+          {PLAYBOOKS.slice(0, 6).map(p=>(
             <article key={p.slug} className="flex flex-col rounded-panel bg-surface p-5 ring-1 ring-line">
-              <p className="text-[12px] font-medium text-accent">{p.category}</p>
+              <p className="text-[12px] font-medium text-accent">{p.track} · {p.category}</p>
               <h3 className="mt-3 text-[19px] font-semibold leading-[1.35] text-ink">
                 <Link to={`/playbooks/${p.slug}`} className="hover:text-accent">{p.title}</Link>
               </h3>
@@ -115,8 +125,8 @@ export default function MarketingHome() {
         <div className="flex flex-wrap items-center justify-between gap-5">
           <div className="max-w-2xl">
             <p className="text-[12px] font-semibold uppercase tracking-[0.17em] text-accent">THE SIGNAL DIGEST</p>
-            <h2 className="mt-3 text-[27px] font-bold tracking-tight text-ink sm:text-[34px]">A quieter way to keep up with marketing AI.</h2>
-            <p className="mt-3 text-[14px] leading-[1.8] text-ink-3">The best actionable discoveries and workflows, thoughtfully selected for a biweekly read.</p>
+            <h2 className="mt-3 text-[27px] font-bold tracking-tight text-ink sm:text-[34px]">Stay useful without chasing every AI headline.</h2>
+            <p className="mt-3 text-[14px] leading-[1.8] text-ink-3">A focused biweekly selection of product-building, growth and automation workflows, with links to the original sources.</p>
           </div>
           <Link to="/newsletter" className="inline-flex shrink-0 rounded-control bg-ink px-5 py-3 text-[14px] font-semibold text-bg hover:opacity-85">Explore the Digest →</Link>
         </div>
