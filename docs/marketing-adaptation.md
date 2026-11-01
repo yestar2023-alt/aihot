@@ -31,6 +31,16 @@ The public website is no longer limited to marketing operators. It now addresses
 - **Validation plan:** see [Maker positioning validation](maker-validation-plan.md) for a 30-day, nine-topic *experiment backlog*, not nine falsely published tests.
 - **Compatibility:** old database IDs, original report machinery, MCP prefix and automated editorial publication safeguards are preserved. No automatic production deployment.
 
+## Three dedicated entry pages
+
+- `/workflows/build` — product shipping, AI coding, agents and deployment.
+- `/workflows/grow` — SEO, content and user acquisition.
+- `/workflows/automate` — operations, data, repeatable processes and research.
+- These entries reuse the single canonical `site/playbooks.ts` records; content is never copied into separate routes.
+- Each page links to individual Playbooks and labels the documented / not independently tested status. The new track pages intentionally use `noindex` while fewer than 3 guides exist in a track, to avoid premature thin-category indexing. Revisit after at least three substantive, source-checked guides per track and sufficient evidence of audience use.
+- Previous `/playbooks?track=Build|Grow|Automate` bookmarks remain usable. Existing AIHOT archive paths and curated Signals publish/withdraw semantics are unchanged.
+- Regression checks should cover `/workflows/{build,grow,automate}`, invalid track = 404, correct canonical URLs, and the legacy archived category-cache tests.
+
 ## Local run / smoke test
 
 1. Follow `AGENTS.md`, `docs/deploy.md` and `docs/sources.md`. Use Node.js **24.22.1+**, PostgreSQL **17** and the repo's Docker Compose configuration.
