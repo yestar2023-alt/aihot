@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router";
 import type { Route } from "./+types/opportunities";
 import type { AdminOpportunityBoard, AdminEditorialOpportunity } from "@aihot/contracts/admin";
 import { SITE } from "@aihot/site";
-import { MARKETING_LANES } from "@aihot/industry/source-coverage";
+import { MARKETING_LANES, WORK_TRACKS } from "@aihot/industry/source-coverage";
 import { adminGet } from "../../lib/admin.server";
 import { useAdminAction } from "../../features/admin/action";
 import { AdminPage, Badge, Card, Stat, Button } from "../../features/admin/ui";
@@ -67,11 +67,13 @@ function Opportunity({ lead }: { lead: AdminEditorialOpportunity }) {
 }
 export default function OpportunityRadar({ loaderData }: Route.ComponentProps) {
   const navigate=useNavigate();
+  const [track,setTrack]=useState("All");
   const [lane,setLane]=useState("all");
   const [onlyActionable,setOnlyActionable]=useState(false);
   const view=useMemo(()=>loaderData.leads.filter(x=>
+    (track==="All" || x.lanes.some(l=>MARKETING_LANES.find(m=>m.id===l)?.track===track)) &&
     (lane==="all" || x.lanes.includes(lane)) && (!onlyActionable || x.reviewPriority>=6)
-  ),[loaderData.leads,lane,onlyActionable]);
+  ),[loaderData.leads,track,lane,onlyActionable]);
   return <AdminPage title="Opportunity Radar" subtitle="Private, explainable editorial leads from captured source metadata. Not a measure of search volume or proven trends."
     actions={<div className="flex gap-2">
       <Link to="/admin/source-coverage" className="rounded-control px-3 py-2 text-[13px] text-accent ring-1 ring-line">Source health →</Link>
@@ -84,6 +86,10 @@ export default function OpportunityRadar({ loaderData }: Route.ComponentProps) {
       <Stat label="Review priority ≥6" value={loaderData.leads.filter(x=>x.reviewPriority>=6).length} />
       <Stat label="Multi-source groupings" value={loaderData.leads.filter(x=>x.relatedCount>1).length} />
     </div>
+    <div className="mt-6 flex flex-wrap gap-2" aria-label="Work track filters">
+      {["All", ...WORK_TRACKS].map(t=><button key={t} type="button" onClick={()=>{setTrack(t);setLane("all");}} aria-pressed={track===t}
+        className={`rounded-full px-4 py-2 text-[13px] font-medium ring-1 ring-line ${track===t ? "bg-ink text-bg" : "bg-surface text-ink"}`}>{t}</button>)}
+    </div>
     <div className="my-6 flex flex-wrap items-center gap-3">
       <label className="text-[13px] font-medium text-ink-2">Discovery window</label>
       <select aria-label="Discovery window" value={String(loaderData.lookbackDays)} onChange={e=>navigate(`?days=${e.target.value}`)}
@@ -93,7 +99,7 @@ export default function OpportunityRadar({ loaderData }: Route.ComponentProps) {
       <label className="text-[13px] font-medium text-ink-2">Research domain</label>
       <select aria-label="Research domain" value={lane} onChange={e=>setLane(e.target.value)}
         className="rounded-control border border-line bg-surface px-3 py-2 text-[13px] text-ink">
-        <option value="all">All domains</option>{MARKETING_LANES.map(l=><option key={l.id} value={l.id}>{l.title}</option>)}
+        <option value="all">All domains</option>{MARKETING_LANES.filter(l=>track==="All" || l.track===track).map(l=><option key={l.id} value={l.id}>{l.title}</option>)}
       </select>
       <label className="flex items-center gap-2 text-[13px] text-ink-2">
         <input type="checkbox" checked={onlyActionable} onChange={e=>setOnlyActionable(e.target.checked)} />
