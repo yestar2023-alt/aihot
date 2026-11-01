@@ -18,6 +18,7 @@ import { replaceContactQr, setTargetEnabled, settingsOverview, updateBudget } fr
 import { createSource, fetchNow, listSources, previewSource, previewStoredSource, sourceDetail, updateSource } from "@aihot/backend/admin/sources";
 import { sourceCoverage } from "@aihot/backend/admin/source-coverage";
 import { editorialOpportunities } from "@aihot/backend/admin/opportunities";
+import { createBrief, getBrief, listBriefs, saveBrief } from "@aihot/backend/admin/briefs";
 import { sendProblem } from "../http/respond.ts";
 import { adminHandler } from "./admin-auth.ts";
 import { ingestItems } from "@aihot/backend/ingest/items";
@@ -89,6 +90,14 @@ export function registerAdmin(app: FastifyInstance) {
   // Sources
   app.get("/api/admin/source-coverage", adminHandler(async () => sourceCoverage()));
   app.get("/api/admin/opportunities", adminHandler(async (req) => editorialOpportunities(q(req).days === "30" ? 30 : 7)));
+  // All briefs remain private and are never promoted by the public publication adapter.
+  app.get("/api/admin/briefs", adminHandler(async () => listBriefs()));
+  app.get("/api/admin/briefs/:id", adminHandler(async (req, reply) =>
+    orNotFound(req, reply, await getBrief(param(req, "id")))));
+  app.post("/api/admin/briefs/:id", adminHandler(async (req, reply, admin) =>
+    orNotFound(req, reply, await createBrief(param(req, "id"), body(req).track, actorOf(admin)))));
+  app.patch("/api/admin/briefs/:id", adminHandler(async (req, reply, admin) =>
+    orNotFound(req, reply, await saveBrief(param(req, "id"), body(req), actorOf(admin)))));
   app.get("/api/admin/sources", adminHandler(async (req) => {
     const f = q(req);
     return listSources({ q: f.q, kind: f.kind, health: f.health, mode: f.mode, use: f.use, enabled: f.enabled as "true" | "false" | undefined, page: page(req) });
