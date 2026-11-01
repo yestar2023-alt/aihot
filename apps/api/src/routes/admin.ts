@@ -17,6 +17,7 @@ import { releaseReceipt } from "@aihot/backend/operations/recover";
 import { replaceContactQr, setTargetEnabled, settingsOverview, updateBudget } from "@aihot/backend/admin/settings";
 import { createSource, fetchNow, listSources, previewSource, previewStoredSource, sourceDetail, updateSource } from "@aihot/backend/admin/sources";
 import { sourceCoverage } from "@aihot/backend/admin/source-coverage";
+import { editorialOpportunities } from "@aihot/backend/admin/opportunities";
 import { sendProblem } from "../http/respond.ts";
 import { adminHandler } from "./admin-auth.ts";
 import { ingestItems } from "@aihot/backend/ingest/items";
@@ -87,6 +88,7 @@ export function registerAdmin(app: FastifyInstance) {
   }));
   // Sources
   app.get("/api/admin/source-coverage", adminHandler(async () => sourceCoverage()));
+  app.get("/api/admin/opportunities", adminHandler(async (req) => editorialOpportunities(q(req).days === "30" ? 30 : 7)));
   app.get("/api/admin/sources", adminHandler(async (req) => {
     const f = q(req);
     return listSources({ q: f.q, kind: f.kind, health: f.health, mode: f.mode, use: f.use, enabled: f.enabled as "true" | "false" | undefined, page: page(req) });
