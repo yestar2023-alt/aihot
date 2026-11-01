@@ -482,6 +482,56 @@
         "Analytics"
       ],
       "definition": "GA4 and marketing measurement, reporting identity, conversion definitions and source-of-truth pipelines."
+    },
+    {
+      "slug": "ai-coding-workflows",
+      "name": "AI coding workflows",
+      "group": "field",
+      "tags": [
+        "AI Coding",
+        "Product Development"
+      ],
+      "definition": "Practical agent-assisted coding, review, test and debugging flows for small software projects."
+    },
+    {
+      "slug": "build-small-ai-app",
+      "name": "Build an AI app",
+      "group": "field",
+      "tags": [
+        "Web Development",
+        "MVP"
+      ],
+      "definition": "Ship a useful minimal web app or AI-powered prototype with credentials, errors and deployment documented."
+    },
+    {
+      "slug": "agent-tools-and-mcp",
+      "name": "Agent tools & MCP",
+      "group": "field",
+      "tags": [
+        "AI Agent Development",
+        "AI Agents"
+      ],
+      "definition": "Tool invocation and agent orchestration with practical boundaries, approval and failure handling."
+    },
+    {
+      "slug": "deploy-and-test",
+      "name": "Test and deploy",
+      "group": "field",
+      "tags": [
+        "Testing",
+        "Deployment"
+      ],
+      "definition": "Repeatable staging, CI/CD, verification and production-release checklists."
+    },
+    {
+      "slug": "indie-distribution",
+      "name": "Indie product distribution",
+      "group": "field",
+      "tags": [
+        "Distribution",
+        "SEO"
+      ],
+      "definition": "Find demand and reach the first users through product-oriented content, search and community evidence."
     }
   ]
 }
