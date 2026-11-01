@@ -15,4 +15,3 @@ CREATE TABLE IF NOT EXISTS editorial_briefs (
   updated_by text NOT NULL,
   updated_at timestamptz NOT NULL DEFAULT now()
 );
-CREATE INDEX IF NOT EXISTS editorial_briefs_updated_at_idx ON editorial_briefs (updated_at DESC);
