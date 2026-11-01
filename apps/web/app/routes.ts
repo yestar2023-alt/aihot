@@ -16,6 +16,7 @@ export default [
   route("archive", "routes/home.tsx"),
   route("playbooks", "routes/playbooks.tsx"),
   route("playbooks/:slug", "routes/playbook.tsx"),
+  route("workflows/:track", "routes/workflow-track.tsx"),
   route("newsletter", "routes/newsletter.tsx"),
   route("all", "routes/all.tsx"),
   route("signals", "routes/signals.tsx"),
