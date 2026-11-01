@@ -84,7 +84,7 @@ export default function SourceCoveragePage({ loaderData }: Route.ComponentProps)
     (lane === "all" || e.lanes.includes(lane)) && (!onlyIssues || e.state !== "observed_ok")
   ), [entries, lane, onlyIssues]);
   return <AdminPage title="Source Radar · Domain Coverage"
-    subtitle="A database view of 22 RSS/Atom feeds and 10 disabled X keyword query presets across 10 marketing disciplines. No source is considered live solely because it exists in configuration."
+    subtitle="A database view of candidate sources for makers, growth and automation. No source is considered live solely because it exists in configuration."
     actions={<Link to="/admin/sources" className="rounded-control px-3 py-2 text-[13px] font-semibold text-accent ring-1 ring-line">All source settings →</Link>}
   >
     <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
@@ -95,7 +95,7 @@ export default function SourceCoveragePage({ loaderData }: Route.ComponentProps)
       <Stat label="Unsafe source modes" value={unsafeModes} tone={unsafeModes ? "bad" : "ok"} />
     </div>
     <p className="mt-3 text-[12px] text-ink-4">Calculated at {new Date(checkedAt).toLocaleString("en-US")}. All counts come from stored runs, not assumed connectivity. Source collection and LLM budgets remain controlled separately.</p>
-    <h2 className="mb-4 mt-9 text-[20px] font-semibold text-ink">Coverage by marketing job</h2>
+    <h2 className="mb-4 mt-9 text-[20px] font-semibold text-ink">Coverage by research domain</h2>
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {lanes.map(l => <button key={l.id} type="button" onClick={() => { setLane(lane === l.id ? "all" : l.id); }}
         aria-pressed={lane === l.id} className={`rounded-panel p-4 text-left ring-1 transition-colors ${lane === l.id ? "bg-accent-soft ring-accent/35" : "bg-surface ring-line hover:bg-bg-sunk"}`}>
