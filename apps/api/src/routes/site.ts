@@ -6,6 +6,7 @@ import type { ReportIndexResponse, ReportLatestPage, ReportNavigationResponse, S
 import { InvalidCursorError } from "@aihot/backend/lib/cursor";
 import { exportMarkdown, loadItemDetail } from "@aihot/backend/publication/detail";
 import { loadPool, SearchBusyError } from "@aihot/backend/publication/pool";
+import { publicCuration } from "@aihot/backend/publication/curation";
 import { loadTimeline } from "@aihot/backend/publication/timeline";
 import { loadStoryFollowups } from "@aihot/backend/publication/followups";
 import { loadGroupReports } from "@aihot/backend/publication/groups";
@@ -59,6 +60,13 @@ export function parseFilters(q: Record<string, string>): FilterParams {
 export function registerSite(app: FastifyInstance) {
   app.get("/api/site/meta", siteHandler(async (req, reply) => {
     return sendJsonWithEtag(req, reply, siteMeta(), { etagPrefix: "meta", cacheControl: "public, max-age=60, s-maxage=60" });
+  }));
+
+  // Separately reviewed and explicitly released marketing Signals; never AIHOT auto-publications.
+  app.get("/api/site/signals", siteHandler(async (req, reply) => {
+    return sendJsonWithEtag(req, reply, await publicCuration(), {
+      etagPrefix: "curated-signals", cacheControl: "public, max-age=30, s-maxage=30, must-revalidate",
+    });
   }));
 
   app.get("/api/site/timeline", siteHandler(async (req, reply) => {

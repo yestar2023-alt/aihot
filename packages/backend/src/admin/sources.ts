@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { SOURCE_DEFAULTS } from "@aihot/site";
 import { SELECTION } from "@aihot/industry/selection";
+import { PRIVATE_MARKETING_SEED_IDS } from "@aihot/industry/source-coverage";
 import type { AdminSource, AdminSourceCreated, AdminSourceDetail, AdminSourcePreview, AdminSourceRow, AdminSources, BeforeJson } from "@aihot/contracts/admin";
 import { REPLACEABLE_SOURCE_KINDS } from "@aihot/contracts/admin";
 import { audit, auditHistory, Conflict } from "../audit.ts";
@@ -119,6 +120,13 @@ export async function previewSource(draft: Pick<SourceRow, "id" | "kind" | "conf
 /** A class of the industry pack (industry/selection.ts), or none. */
 const SelectionClass = z.string().refine((c) => Object.hasOwn(SELECTION.classes, c), { message: "不是行业包里的信源类别" }).nullable();
 
+// Curated seed feeds and manual bookmarks must not be converted to auto-published news sources
+// until the public approval gate is independently tested on all public reading surfaces.
+const PRIVATE_CURATED_SOURCE_IDS = new Set([
+  "manual-x-bookmarks", "manual-github-bookmarks", "manual-youtube-bookmarks",
+  ...PRIVATE_MARKETING_SEED_IDS,
+]);
+
 const EDITABLE = z
   .object({
     name: z.string().min(1).max(200),
@@ -158,6 +166,12 @@ async function saveSource(id: string, patch: z.infer<typeof EDITABLE>, input: { 
     if (patch.config) await tx`SELECT pg_advisory_xact_lock(hashtext('admin-source-identity'))`;
     const [before] = await tx`SELECT * FROM sources WHERE id = ${id} FOR UPDATE`;
     if (!before) return null;
+    if (PRIVATE_CURATED_SOURCE_IDS.has(id) && ((patch.site_fulltext === true) || (patch.syndicate_fulltext === true))) {
+      throw new Conflict("Curated source full-text redistribution is prohibited without an explicit rights review.");
+    }
+    if (PRIVATE_CURATED_SOURCE_IDS.has(id) && patch.participation_mode !== undefined && patch.participation_mode !== "isolated") {
+      throw new Conflict("This curation source is private. Editorial publication requires a separate approved release workflow.");
+    }
     if (new Date(before.updated_at as Date).toISOString() !== input.version) throw new Conflict("信源已被其他操作修改，请刷新后再改");
     const kindChanged = patch.kind !== undefined && patch.kind !== before.kind;
     if (patch.kind !== undefined && !patch.config) throw new UnsupportedConfig("调整采集方式须同时提供完整采集配置");
@@ -273,6 +287,10 @@ export async function findDuplicateSource(kind: string, config: Record<string, u
 
 export async function createSource(input: unknown, actor: string): Promise<BeforeJson<AdminSourceCreated>> {
   const s = CreateSchema.parse(input);
+  if (PRIVATE_CURATED_SOURCE_IDS.has(s.id) &&
+    (s.participation_mode !== "isolated" || s.site_fulltext || s.syndicate_fulltext)) {
+    throw new Conflict("Reserved curated sources must remain isolated and cannot redistribute full text.");
+  }
   s.first_party = s.tier === "T1";
   assertSupportedConfig(s.kind, s.config);
   const result = await sql.begin(async (tx) => {

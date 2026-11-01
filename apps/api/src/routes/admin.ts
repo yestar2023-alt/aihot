@@ -16,8 +16,17 @@ import { resolveDelivery } from "@aihot/backend/notify/deliver";
 import { releaseReceipt } from "@aihot/backend/operations/recover";
 import { replaceContactQr, setTargetEnabled, settingsOverview, updateBudget } from "@aihot/backend/admin/settings";
 import { createSource, fetchNow, listSources, previewSource, previewStoredSource, sourceDetail, updateSource } from "@aihot/backend/admin/sources";
+import { sourceCoverage } from "@aihot/backend/admin/source-coverage";
+import { editorialOpportunities } from "@aihot/backend/admin/opportunities";
+import { createBrief, getBrief, listBriefs, saveBrief } from "@aihot/backend/admin/briefs";
 import { sendProblem } from "../http/respond.ts";
 import { adminHandler } from "./admin-auth.ts";
+import { ingestItems } from "@aihot/backend/ingest/items";
+import { sql } from "@aihot/backend/db";
+import { parseXPostUrl } from "@aihot/backend/ingest/x-bookmark";
+import { parseSourceBookmark } from "@aihot/backend/ingest/bookmarks";
+import { listCuration, updateCuration } from "@aihot/backend/admin/curation";
+import { releaseCuration, withdrawCuration } from "@aihot/backend/admin/curation-release";
 
 // What every admin route reads its request with (the modules' admin routes too).
 type Q = Record<string, string | undefined>;
@@ -35,7 +44,60 @@ function decodeImage(dataUrl: unknown): Buffer {
 }
 
 export function registerAdmin(app: FastifyInstance) {
+  // Unified, private metadata-only editorial bookmark intake.
+  app.post("/api/admin/bookmark", adminHandler(async (req, reply) => {
+    const raw = body<{ url?: unknown }>(req).url;
+    if (typeof raw !== "string" || raw.length > 2048) {
+      return reply.code(400).send({ detail: "Provide a valid supported HTTPS source URL." });
+    }
+    let item: ReturnType<typeof parseSourceBookmark>;
+    try { item = parseSourceBookmark(raw); }
+    catch (error) {
+      return reply.code(400).send({ detail: error instanceof Error ? error.message : "Invalid source URL." });
+    }
+    const existing = await sql<{ participation_mode: string }[]>`
+      SELECT participation_mode FROM sources WHERE id = ${item.sourceId}`;
+    if (existing.some(source => source.participation_mode !== "isolated")) {
+      return reply.code(409).send({ detail: "This source must remain isolated before editorial intake." });
+    }
+    const saved = await ingestItems({
+      sourceId: item.sourceId, sourceName: item.sourceName,
+      items: [{ title: item.title, url: item.canonicalUrl }],
+    });
+    return { created: saved.created, kind: item.kind, url: item.canonicalUrl, private: true };
+  }));
+
+  // Private manual X bookmark intake: an authenticated admin action, not a publishing endpoint.
+  app.post("/api/admin/bookmark-x", adminHandler(async (req, reply) => {
+    const raw = body<{ url?: unknown }>(req).url;
+    if (typeof raw !== "string" || raw.length > 2048) return reply.code(400).send({ detail: "Provide a valid X post URL (maximum 2048 characters)." });
+    let post: ReturnType<typeof parseXPostUrl>;
+    try { post = parseXPostUrl(raw); }
+    catch (e) { return reply.code(400).send({ detail: e instanceof Error ? e.message : "Invalid X URL." }); }
+    // Fail closed if someone changed the private intake source into a public editorial feed.
+    const existing = await sql<{ participation_mode: string }[]>`
+      SELECT participation_mode FROM sources WHERE id = 'manual-x-bookmarks'`;
+    if (existing.some(row => row.participation_mode !== "isolated")) {
+      return reply.code(409).send({ detail: "Manual X source must remain isolated until editorial approval is implemented." });
+    }
+    const stored = await ingestItems({
+      sourceId: "manual-x-bookmarks",
+      sourceName: "Manual X bookmarks",
+      items: [{ title: `X post by @${post.handle} (${post.postId}; content not retrieved)`, url: post.url }],
+    });
+    return { created: stored.created, url: post.url, private: true };
+  }));
   // Sources
+  app.get("/api/admin/source-coverage", adminHandler(async () => sourceCoverage()));
+  app.get("/api/admin/opportunities", adminHandler(async (req) => editorialOpportunities(q(req).days === "30" ? 30 : 7)));
+  // All briefs remain private and are never promoted by the public publication adapter.
+  app.get("/api/admin/briefs", adminHandler(async () => listBriefs()));
+  app.get("/api/admin/briefs/:id", adminHandler(async (req, reply) =>
+    orNotFound(req, reply, await getBrief(param(req, "id")))));
+  app.post("/api/admin/briefs/:id", adminHandler(async (req, reply, admin) =>
+    orNotFound(req, reply, await createBrief(param(req, "id"), body(req).track, actorOf(admin)))));
+  app.patch("/api/admin/briefs/:id", adminHandler(async (req, reply, admin) =>
+    orNotFound(req, reply, await saveBrief(param(req, "id"), body(req), actorOf(admin)))));
   app.get("/api/admin/sources", adminHandler(async (req) => {
     const f = q(req);
     return listSources({ q: f.q, kind: f.kind, health: f.health, mode: f.mode, use: f.use, enabled: f.enabled as "true" | "false" | undefined, page: page(req) });
@@ -49,6 +111,17 @@ export function registerAdmin(app: FastifyInstance) {
   }));
   app.post("/api/admin/sources/:id/preview", adminHandler(async (req, reply) => orNotFound(req, reply, await previewStoredSource(param(req, "id")))));
   app.post("/api/admin/sources/:id/fetch", adminHandler(async (req, reply, admin) => orNotFound(req, reply, await fetchNow(param(req, "id"), actorOf(admin)))));
+
+  // Private editorial inbox: state changes are audited; approval does not publish.
+  app.get("/api/admin/curation", adminHandler(async req => listCuration(q(req).status)));
+  app.post("/api/admin/curation/:id/review", adminHandler(async (req, reply, admin) =>
+    orNotFound(req, reply, await updateCuration(param(req, "id"), body(req) as never, actorOf(admin)))));
+
+  // Explicit, auditable public release; private review approval alone never publishes.
+  app.post("/api/admin/curation/:id/release", adminHandler(async (req, reply, admin) =>
+    orNotFound(req, reply, await releaseCuration(param(req, "id"), body(req), actorOf(admin)))));
+  app.post("/api/admin/curation/:id/withdraw", adminHandler(async (req, reply, admin) =>
+    orNotFound(req, reply, await withdrawCuration(param(req, "id"), actorOf(admin)))));
 
   // Content and events
   app.get("/api/admin/content", adminHandler(async (req) => ({ rows: await searchContent(q(req).q ?? "") })));

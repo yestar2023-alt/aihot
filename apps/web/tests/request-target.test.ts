@@ -9,6 +9,7 @@ let web: WebServer;
 const upstreamPaths: string[] = [];
 const api = fakeApi((url, _res, req) => {
   upstreamPaths.push(req.url ?? "");
+  if (url.pathname === "/api/site/signals") return { items: [] };
   if (url.pathname === "/api/site/timeline") return { cards: [], nextCursor: null, dayCounts: {}, hot: [], filters: { category: null, channel: null, tag: null } };
 });
 

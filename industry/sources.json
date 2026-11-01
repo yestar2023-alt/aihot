@@ -1,367 +1,663 @@
 {
-  "$comment": "示范信源：首次启动时导入（scripts/seed.ts），已存在的不会被覆盖。之后在后台“信源”里新建、修改和暂停。字段说明见 docs/customize.md。",
+  "$comment": "Private candidate registry for independent makers and lean teams. Includes original marketing feeds, 2 additional disabled Build-domain GitHub Atom candidates and disabled paid X keyword presets. No automatic public release or full-text redistribution. Configured feeds are NOT verified as working until separately previewed; paid APIs require explicit operator approval.",
   "sources": [
     {
-      "id": "rss-openai-news",
-      "name": "OpenAI News",
+      "id": "rss-n8n-blog",
+      "name": "n8n Blog",
       "kind": "rss",
       "config": {
-        "feedUrl": "https://openai.com/news/rss.xml",
+        "feedUrl": "https://blog.n8n.io/rss/",
         "_aihot": {
-          "initialBackfillLimit": 8
+          "initialBackfillLimit": 5
         }
       },
       "tier": "T1",
-      "owner_entity_id": "openai",
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-google-deepmind",
-      "name": "Google DeepMind",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://deepmind.google/blog/rss.xml",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "owner_entity_id": "google",
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-google-research",
-      "name": "Google Research",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://research.google/blog/rss/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "owner_entity_id": "google",
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方",
-        "研究"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-hugging-face",
-      "name": "Hugging Face Blog",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://huggingface.co/blog/feed.xml",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "owner_entity_id": "hugging-face",
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方",
-        "开源"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-microsoft-research",
-      "name": "Microsoft Research",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://www.microsoft.com/en-us/research/feed/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "owner_entity_id": "microsoft",
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方",
-        "研究"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-nvidia-blog",
-      "name": "NVIDIA Blog",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://blogs.nvidia.com/feed/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "owner_entity_id": "nvidia",
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-aws-ml",
-      "name": "AWS Machine Learning Blog",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://aws.amazon.com/blogs/machine-learning/feed/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方",
-        "教程"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-github-ai",
-      "name": "GitHub Blog · AI & ML",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://github.blog/ai-and-ml/feed/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-mistral",
-      "name": "Mistral AI",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://mistral.ai/news/rss",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-bair",
-      "name": "Berkeley AI Research",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://bair.berkeley.edu/blog/feed.xml",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
+      "owner_entity_id": "n8n",
+      "participation_mode": "isolated",
       "interval_minutes": 180,
       "tags": [
-        "研究"
+        "Automation",
+        "Workflow"
       ],
       "site_fulltext": false,
       "syndicate_fulltext": false
     },
     {
-      "id": "rss-the-verge-ai",
-      "name": "The Verge · AI",
+      "id": "rss-buffer-resources",
+      "name": "Buffer Resources",
       "kind": "rss",
       "config": {
-        "feedUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+        "feedUrl": "https://buffer.com/resources/feed",
         "_aihot": {
-          "initialBackfillLimit": 8
+          "initialBackfillLimit": 5
         }
       },
-      "tier": "T2",
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 60,
-      "tags": [
-        "媒体"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-techcrunch-ai",
-      "name": "TechCrunch · AI",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T2",
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 60,
-      "tags": [
-        "媒体"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-ars-technica-ai",
-      "name": "Ars Technica · AI",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://arstechnica.com/ai/feed/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T2",
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 60,
-      "tags": [
-        "媒体"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-mit-tech-review-ai",
-      "name": "MIT Technology Review · AI",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T2",
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "媒体"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-the-decoder",
-      "name": "The Decoder",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://the-decoder.com/feed/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T2",
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 60,
-      "tags": [
-        "媒体"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-simon-willison",
-      "name": "Simon Willison",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://simonwillison.net/atom/everything/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T2",
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "个人"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-import-ai",
-      "name": "Import AI",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://importai.substack.com/feed",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T2",
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
+      "tier": "T1",
+      "owner_entity_id": "buffer",
+      "participation_mode": "isolated",
       "interval_minutes": 180,
       "tags": [
-        "个人",
-        "周刊"
+        "Social Media",
+        "Content"
       ],
       "site_fulltext": false,
       "syndicate_fulltext": false
     },
     {
-      "id": "rss-latent-space",
-      "name": "Latent Space",
+      "id": "rss-hubspot-marketing",
+      "name": "HubSpot Marketing Blog",
       "kind": "rss",
       "config": {
-        "feedUrl": "https://www.latent.space/feed",
+        "feedUrl": "https://blog.hubspot.com/marketing/rss.xml",
         "_aihot": {
-          "initialBackfillLimit": 8
+          "initialBackfillLimit": 5
+        }
+      },
+      "tier": "T1",
+      "owner_entity_id": "hubspot",
+      "participation_mode": "isolated",
+      "interval_minutes": 240,
+      "tags": [
+        "Growth",
+        "CRM"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-make-blog",
+      "name": "Make Blog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.make.com/en/blog/feed",
+        "_aihot": {
+          "initialBackfillLimit": 5
+        }
+      },
+      "tier": "T1",
+      "owner_entity_id": "make",
+      "participation_mode": "isolated",
+      "interval_minutes": 240,
+      "tags": [
+        "Automation"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-n8n-github-releases",
+      "name": "n8n GitHub releases",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://github.com/n8n-io/n8n/releases.atom",
+        "_aihot": {
+          "initialBackfillLimit": 5
+        }
+      },
+      "tier": "T1",
+      "owner_entity_id": "n8n",
+      "participation_mode": "isolated",
+      "interval_minutes": 240,
+      "tags": [
+        "Automation",
+        "Workflow"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-n8n-youtube",
+      "name": "n8n YouTube tutorials",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.youtube.com/feeds/videos.xml?channel_id=UCiHVTkJtWSdc9N3h0nUGWLg",
+        "_aihot": {
+          "initialBackfillLimit": 5
+        }
+      },
+      "tier": "T1",
+      "owner_entity_id": "n8n",
+      "participation_mode": "isolated",
+      "interval_minutes": 240,
+      "tags": [
+        "Automation",
+        "Video"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-google-search-central",
+      "name": "Google Search Central Blog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://developers.google.com/search/blog/feed.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "SEO"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-ahrefs-blog",
+      "name": "Ahrefs Blog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://ahrefs.com/blog/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "SEO"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-search-engine-land",
+      "name": "Search Engine Land",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://searchengineland.com/feed",
+        "_aihot": {
+          "initialBackfillLimit": 3
         }
       },
       "tier": "T2",
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 180,
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
       "tags": [
-        "个人"
+        "SEO"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-social-media-examiner",
+      "name": "Social Media Examiner",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.socialmediaexaminer.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Social Media"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-later-blog",
+      "name": "Later Blog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://later.com/rss.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Social Media"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-google-ads-commerce",
+      "name": "Google Ads & Commerce Blog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://blog.google/products/ads-commerce/rss/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Growth"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-microsoft-advertising",
+      "name": "Microsoft Advertising Blog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://about.ads.microsoft.com/en-us/blog/rss",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Growth"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-meta-developers",
+      "name": "Meta Developer News",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://developers.facebook.com/blog/devblog/rss/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Social Media"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-omnisend-blog",
+      "name": "Omnisend Ecommerce Marketing",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.omnisend.com/blog/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Email Marketing"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-campaign-monitor",
+      "name": "Campaign Monitor Blog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.campaignmonitor.com/blog/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Email Marketing"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-amplitude-blog",
+      "name": "Amplitude Blog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://amplitude.com/feed",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Analytics"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-posthog-blog",
+      "name": "PostHog Blog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://posthog.com/rss.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Analytics"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-shopify-changelog",
+      "name": "Shopify Changelog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://changelog.shopify.com/feed.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Growth"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-practical-ecommerce",
+      "name": "Practical Ecommerce",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.practicalecommerce.com/feed",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Growth"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-lennys-newsletter",
+      "name": "Lenny's Newsletter",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.lennysnewsletter.com/feed",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "Growth"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-hubspot-sales",
+      "name": "HubSpot Sales Blog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://blog.hubspot.com/sales/rss.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "interval_minutes": 360,
+      "tags": [
+        "CRM"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "x-auto-marketing",
+      "name": "X: marketing automation workflows",
+      "kind": "x_search",
+      "config": {
+        "query": "n8n marketing automation lang:en -filter:replies",
+        "searchType": "Latest"
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 240,
+      "tags": [
+        "Automation",
+        "Workflow"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "x-seo-automation",
+      "name": "X: AI SEO workflows",
+      "kind": "x_search",
+      "config": {
+        "query": "AI SEO workflow lang:en -filter:replies",
+        "searchType": "Latest"
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 240,
+      "tags": [
+        "SEO",
+        "AEO"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "x-social-automation",
+      "name": "X: AI social content operations",
+      "kind": "x_search",
+      "config": {
+        "query": "AI social media automation lang:en -filter:replies",
+        "searchType": "Latest"
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 240,
+      "tags": [
+        "Social Media",
+        "Content Repurposing"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "x-paid-media",
+      "name": "X: AI ads workflows",
+      "kind": "x_search",
+      "config": {
+        "query": "AI ads automation lang:en -filter:replies",
+        "searchType": "Latest"
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 240,
+      "tags": [
+        "Paid Ads",
+        "PPC"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "x-content-repurposing",
+      "name": "X: content repurposing",
+      "kind": "x_search",
+      "config": {
+        "query": "AI content repurposing lang:en -filter:replies",
+        "searchType": "Latest"
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 240,
+      "tags": [
+        "Content Repurposing",
+        "Content Planning"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "x-email-lifecycle",
+      "name": "X: email lifecycle AI",
+      "kind": "x_search",
+      "config": {
+        "query": "AI email marketing workflow lang:en -filter:replies",
+        "searchType": "Latest"
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 240,
+      "tags": [
+        "Email Marketing",
+        "Lifecycle"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "x-analytics-reporting",
+      "name": "X: marketing data reporting",
+      "kind": "x_search",
+      "config": {
+        "query": "AI marketing reporting lang:en -filter:replies",
+        "searchType": "Latest"
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 240,
+      "tags": [
+        "Reporting",
+        "Analytics"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "x-ecommerce-growth",
+      "name": "X: ecommerce automation",
+      "kind": "x_search",
+      "config": {
+        "query": "Shopify AI automation lang:en -filter:replies",
+        "searchType": "Latest"
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 240,
+      "tags": [
+        "Ecommerce",
+        "Growth"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "x-growth-experiments",
+      "name": "X: growth experiments",
+      "kind": "x_search",
+      "config": {
+        "query": "AI growth experiments lang:en -filter:replies",
+        "searchType": "Latest"
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 240,
+      "tags": [
+        "Marketing Experiments",
+        "Conversion Optimization"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "x-agent-marketing",
+      "name": "X: AI coding and builder agent workflows (disabled)",
+      "kind": "x_search",
+      "config": {
+        "query": "AI coding agent workflow lang:en -filter:replies",
+        "searchType": "Latest"
+      },
+      "tier": "T2",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 240,
+      "tags": [
+        "AI Coding",
+        "AI Agent Development"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-nextjs-releases",
+      "name": "Next.js GitHub Releases (candidate)",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://github.com/vercel/next.js/releases.atom",
+        "_aihot": {
+          "initialBackfillLimit": 2
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 360,
+      "tags": [
+        "Web Development",
+        "Deployment"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-openai-agents-releases",
+      "name": "OpenAI Agents Python Releases (candidate)",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://github.com/openai/openai-agents-python/releases.atom",
+        "_aihot": {
+          "initialBackfillLimit": 2
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "isolated",
+      "enabled": false,
+      "interval_minutes": 360,
+      "tags": [
+        "AI Agent Development",
+        "Developer Tooling"
       ],
       "site_fulltext": false,
       "syndicate_fulltext": false

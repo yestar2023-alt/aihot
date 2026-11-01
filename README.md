@@ -1,3 +1,7 @@
+> **This repository is being adapted into an English AI marketing curation project.** See [the implementation status and remaining milestones](docs/marketing-adaptation.md). The original AIHOT README below describes the upstream framework, not a finished or deployed AI Marketer Signal website.
+
+---
+
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/assets/banner-dark.png">

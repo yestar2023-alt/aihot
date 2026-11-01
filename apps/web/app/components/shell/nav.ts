@@ -1,7 +1,7 @@
 // Site navigation in one place: the desktop sidebar's sections and the phone tab bar's tabs, the engine's
 // and the site's modules'.
 import type { ReactNode } from "react";
-import { NAV, subjectAfter, withSubject } from "@aihot/site";
+import { NAV } from "@aihot/site";
 import { webModules } from "../../site-modules";
 import {
   IconBolt, IconBookmark, IconDoc, IconFlame, IconGrid, IconHeart, IconHistory, IconList, IconMessage, IconPlug, IconUser,
@@ -19,23 +19,23 @@ export interface NavItem {
 
 const SECTIONS: Array<{ title: string; items: NavItem[] }> = [
   {
-    title: "内容",
+    title: "Explore",
     items: [
-      { to: "/", label: "精选", icon: IconBolt, end: true },
-      { to: "/all", label: subjectAfter("全部", "动态"), icon: IconList },
-      { to: "/hot", label: "热点榜", icon: IconFlame },
-      { to: "/daily", label: withSubject("日报"), icon: IconDoc },
-      { to: "/topics", label: "主题", icon: IconGrid },
-      { to: "/starred", label: "收藏", icon: IconBookmark },
+      { to: "/", label: "Home", icon: IconBolt, end: true },
+      { to: "/signals", label: "Signals", icon: IconDoc },
+      { to: "/playbooks", label: "Playbooks", icon: IconGrid },
+      { to: "/workflows/build", label: "Build", icon: IconPlug },
+      { to: "/workflows/grow", label: "Grow", icon: IconFlame },
+      { to: "/workflows/automate", label: "Automate", icon: IconBolt },
+      { to: "/newsletter", label: "The Digest", icon: IconMessage },
     ],
   },
   {
-    title: "更多",
+    title: "About",
     items: [
-      { to: "/agent", label: "Agent 接入", icon: IconPlug },
-      { to: "/about", label: "关于", icon: IconHeart },
-      { to: "/changelog", label: "更新日志", icon: IconHistory, changelog: true },
-      { to: "/feedback", label: "反馈", icon: IconMessage },
+      { to: "/about", label: "About", icon: IconHeart },
+      { to: "/privacy", label: "Privacy", icon: IconDoc },
+      { to: "/terms", label: "Terms", icon: IconDoc },
     ],
   },
 ];
@@ -104,10 +104,10 @@ export interface Tab {
 }
 
 const ENGINE_TABS: Tab[] = [
-  { key: "featured", to: "/", label: "精选", icon: IconBolt },
-  { key: "hot", to: "/hot", label: "热点", icon: IconFlame },
-  { key: "daily", to: "/daily", label: "日报", icon: IconDoc },
-  { key: "me", to: "/more", label: "我的", icon: IconUser, changelog: true },
+  { key: "featured", to: "/", label: "Home", icon: IconBolt },
+  { key: "signals", to: "/signals", label: "Signals", icon: IconDoc },
+  { key: "playbooks", to: "/playbooks", label: "Playbooks", icon: IconGrid },
+  { key: "me", to: "/newsletter", label: "Digest", icon: IconMessage },
 ];
 
 /** The tab bar: the engine's, the modules' before 我的. */

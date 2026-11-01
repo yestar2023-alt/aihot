@@ -37,7 +37,14 @@ const nav = (): Array<{ group: string; items: AdminNavEntry[] }> => [
   {
     group: "内容",
     items: [
+      { to: "/admin/curation", label: "Editorial Inbox" },
+      { to: "/admin/digest", label: "Digest draft" },
+      { to: "/admin/save-source", label: "Save source link" },
+      { to: "/admin/save-x", label: "X-only legacy saver" },
       { to: "/admin/content", label: "内容诊断" },
+      { to: "/admin/source-coverage", label: "Source Radar" },
+      { to: "/admin/opportunities", label: "Opportunity Radar" },
+      { to: "/admin/briefs", label: "Playbook Briefs" },
       { to: "/admin/sources", label: "信源", count: "sources", tone: "bad" },
       { to: "/admin/feedback", label: "反馈", count: "feedback", tone: "accent" },
     ],

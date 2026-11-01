@@ -21,6 +21,7 @@ export const SELECTION = {
   classes: {
     ecosystem: { label: "生态与基础设施", threshold: 70 },
     leaderboard: { label: "评测榜单", threshold: 76 },
+    marketing: { label: "Marketing automation", threshold: 68 },
   } as Record<string, { label: string; threshold: number }>,
   /**
    * 没入选、但平均分高于这个数的资料，也用精选的写法（内容理解：标题、摘要、推荐理由）来写，

@@ -85,6 +85,28 @@ export interface AdminAudit {
   rows: AdminAuditRow[];
 }
 
+// Private curation; `approved` is editorial readiness, not permission to publish.
+export type CurationStatus = "inbox" | "shortlisted" | "fact_checked" | "approved" | "rejected";
+export interface AdminCurationRow {
+  article_id: string;
+  title: string;
+  url: string;
+  source_name: string;
+  discovered_at: Timestamp;
+  published_at: Timestamp | null;
+  status: CurationStatus;
+  release_status: "published" | "withdrawn" | null;
+  note: string;
+  evidence_url: string | null;
+  version: number;
+  updated_by: string | null;
+  updated_at: Timestamp | null;
+}
+export interface AdminCurationInbox {
+  rows: AdminCurationRow[];
+  counts: Record<string, number>;
+}
+
 // Sources
 
 /** Ordinary collectors may replace one another while retaining a source's identity and history. */
@@ -97,6 +119,105 @@ export interface AdminSourceUpdate {
   );
   version: string;
   reason?: string;
+}
+
+/** Health describes recorded collection runs, not independently validated feed content. */
+export type SourceCoverageState =
+  | "not_imported" | "paused" | "failing" | "never_successful" | "not_tested"
+  | "degraded" | "stale" | "overdue" | "observed_ok";
+
+export interface SourceCoverageEntry {
+  id: string;
+  kind: string;
+  name: string;
+  lanes: string[];
+  state: SourceCoverageState;
+  health: string | null;
+  enabled: boolean;
+  isolated: boolean | null;
+  items7d: number;
+  lastOkAt: Timestamp | null;
+  lastFetchAt: Timestamp | null;
+  lastRunAt: Timestamp | null;
+  lastRunStatus: string | null;
+  lastFound: number | null;
+  lastNew: number | null;
+  lastError: string | null;
+}
+
+/** A private editorial suggestion from source metadata; not an AI-verified claim. */
+/** Private Playbook outline. Never present in public site or RSS responses. */
+export type EditorialBriefStatus = "draft" | "ready_for_review";
+export type EditorialBriefTrack = "Build" | "Grow" | "Automate";
+export interface AdminEditorialBrief {
+  articleId: string;
+  sourceTitle: string;
+  sourceUrl: string;
+  sourceName: string;
+  sourcePublishedAt: string | null;
+  reviewStatus: string;
+  track: EditorialBriefTrack;
+  title: string;
+  userJob: string;
+  intendedReader: string;
+  prerequisites: string;
+  stepsOutline: string;
+  evidenceNotes: string;
+  limitations: string;
+  validationPlan: string;
+  status: EditorialBriefStatus;
+  version: number;
+  updatedAt: string;
+  updatedBy: string;
+}
+export interface AdminEditorialBriefs { rows: AdminEditorialBrief[] }
+
+export interface AdminOpportunitySource {
+  id: string;
+  title: string;
+  url: string;
+  sourceId: string;
+  sourceName: string;
+  publishedAt: string | null;
+  discoveredAt: string;
+  reviewStatus: "inbox" | "shortlisted" | "fact_checked" | "approved" | "rejected";
+  reviewVersion: number;
+}
+export interface AdminEditorialOpportunity {
+  key: string;
+  title: string;
+  lanes: string[];
+  reviewPriority: number;
+  priorityReasons: string[];
+  relatedCount: number;
+  distinctDomains: number;
+  sources: AdminOpportunitySource[];
+  reviewStatus: "inbox" | "shortlisted" | "fact_checked" | "approved" | "rejected";
+  latestDiscoveredAt: string;
+  confidence: "unverified_source_metadata";
+}
+export interface AdminOpportunityBoard {
+  generatedAt: string;
+  lookbackDays: number;
+  totalCandidates: number;
+  displayed: number;
+  leads: AdminEditorialOpportunity[];
+  methodology: string;
+}
+
+export interface AdminSourceCoverage {
+  checkedAt: Timestamp;
+  expected: number;
+  imported: number;
+  observedOk: number;
+  untested: number;
+  unsafeModes: number;
+  lanes: Array<{
+    id: string; title: string; description: string;
+    expected: number; imported: number; observedOk: number;
+    needingAttention: number; items7d: number;
+  }>;
+  entries: SourceCoverageEntry[];
 }
 
 export interface AdminSourceRow {
