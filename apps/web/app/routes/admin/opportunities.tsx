@@ -90,8 +90,8 @@ export default function OpportunityRadar({ loaderData }: Route.ComponentProps) {
         className="rounded-control border border-line bg-surface px-3 py-2 text-[13px] text-ink">
         <option value="7">Last 7 days</option><option value="30">Last 30 days</option>
       </select>
-      <label className="text-[13px] font-medium text-ink-2">Marketing domain</label>
-      <select aria-label="Marketing domain" value={lane} onChange={e=>setLane(e.target.value)}
+      <label className="text-[13px] font-medium text-ink-2">Research domain</label>
+      <select aria-label="Research domain" value={lane} onChange={e=>setLane(e.target.value)}
         className="rounded-control border border-line bg-surface px-3 py-2 text-[13px] text-ink">
         <option value="all">All domains</option>{MARKETING_LANES.map(l=><option key={l.id} value={l.id}>{l.title}</option>)}
       </select>
