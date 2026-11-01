@@ -57,6 +57,8 @@ export default [
     route("admin/content/:id", "routes/admin/content-item.tsx"),
     route("admin/source-coverage", "routes/admin/source-coverage.tsx"),
     route("admin/opportunities", "routes/admin/opportunities.tsx"),
+    route("admin/briefs", "routes/admin/briefs.tsx"),
+    route("admin/briefs/:id", "routes/admin/brief.tsx"),
     route("admin/sources", "routes/admin/sources.tsx"),
     route("admin/sources/new", "routes/admin/source-new.tsx"),
     route("admin/sources/:id", "routes/admin/source.tsx"),
